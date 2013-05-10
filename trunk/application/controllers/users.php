@@ -34,7 +34,7 @@ class Users extends CI_Controller{
 
 
     #mandar a vista
-    $this->load->view('subscribe/index', $data);
+    $this->load->view('users/index', $data);
 	}
 
 
@@ -58,19 +58,26 @@ class Users extends CI_Controller{
     $data['vc_username']    = array('name'=>'vc_username', 'size'=>30, 'key'=>'Nombre');    
     $data['vc_lastname']    = array('name'=>'vc_lastname', 'size'=>30, 'key'=>'Apellidos');
     $data['dt_birthday']    = array('name'=>'dt_birthday', 'size'=>30, 'key'=>'Fecha de nacimiento');
-    $data['vc_phonenumber'] = array('name'=>'vc_phonenumber', 'size'=>30, 'key'=>'Telefono');
-    $data['vc_msisdn']      = array('name'=>'vc_msisdn', 'size'=>30, 'key'=>'Celular');
-    $data['vc_picture']     = array('name'=>'vc_picture', 'size'=>30, 'key'=>'Imagen');
+    $data['vc_worknumber']  = array('name'=>'vc_worknumber', 'size'=>15, 'key'=>'Oficina');
+    $data['vc_phonenumber'] = array('name'=>'vc_phonenumber', 'size'=>15, 'key'=>'Particular');
+    $data['vc_msisdn']      = array('name'=>'vc_msisdn', 'size'=>15, 'key'=>'Celular');
+    $data['vc_street']      = array('name'=>'vc_street', 'size'=>30, 'key'=>'Calle');
+    $data['vc_city']        = array('name'=>'vc_city', 'size'=>30, 'key'=>'Ciudad');
+    $data['vc_state']       = array('name'=>'vc_state', 'size'=>30, 'key'=>'Estado');
+    $data['i_cp']           = array('name'=>'i_cp', 'size'=>7, 'key'=>'CP.');
+    $data['vc_country']     = array('name'=>'vc_country', 'size'=>30, 'key'=>'Pais');
+    $data['vc_email']       = array('name'=>'vc_email', 'size'=>40, 'key'=>'E-mail');
+    $data['vc_facebook']    = array('name'=>'vc_facebook', 'size'=>30, 'key'=>'Facebook');
+    $data['vc_picture']     = array('name'=>'vc_picture', 'size'=>40, 'key'=>'Imagen');
     
 
-    $this->load->view('subscribe/new_subscription', $data); 
+    $this->load->view('users/new_subscription', $data); 
 
 
 		/* validacion si es nueva inscripcion o re inscripcion */
  	}
 
   function view (){
-    parent::__construct();	
 
  		$this->load->helper('number_helper');
 	 	$this->load->model('subscribe_bss', '', TRUE);
@@ -79,7 +86,6 @@ class Users extends CI_Controller{
   }
 
 	function edit ($type = NULL) {
- 		parent::__construct();
  		
  		$this->load->helper('number_helper');
 	 	$this->load->model('subscribe_bss', '', TRUE);
@@ -88,7 +94,6 @@ class Users extends CI_Controller{
   }
 
   function deptors () {
-  	parent::__construct();
 
 
  		$this->load->helper('number_helper');
