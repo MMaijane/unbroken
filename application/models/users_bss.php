@@ -62,10 +62,7 @@ class Users_bss extends CI_Model {
   $menu = new Menu;
   $data['menu'] = $menu->show_menu();
 
-
-
   return $data;
-
   }
 
 
