@@ -9,7 +9,7 @@ class Menu{
   		$menu .= anchor("users","Clientes");
   		$menu .= "</li>";
   		$menu .= "<li>";		
-  		$menu .= anchor("/","Promociones");		
+  		$menu .= anchor("packages/","Promociones");		
   		$menu .= "</li>";		
   		$menu .= "</ul>";
 		

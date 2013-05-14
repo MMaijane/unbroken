@@ -16,8 +16,9 @@ class Packages_bss extends CI_Model {
 
   function get_packages() {
 
-    $query = $this->db->get('tb_packages', 10);
-    return $query->result();
+    $query = $this->db->get('tb_packages');
+
+    return $query->result_array();
   }
 
 
@@ -39,28 +40,43 @@ class Packages_bss extends CI_Model {
 
 
 
-  function update_entry() {
-        
-    $this->title   = $_POST['title'];
-    $this->content = $_POST['content'];
-    $this->date    = time();
-
-    $this->db->update('entries', $this, array('id' => $_POST['id']));
+  function view_package ($id) {
+  
+    $query = $this->db->get_where('tb_packages', array('id_packages' => $id));
+    return $query->row_array();
   }
 
 
 
 
+  function change_status ($id, $status) {
+
+    $data = array ('b_status' => $status);
+    $this->db->where('id_packages', $id);
+    $this->db->update('tb_packages', $data);
+  }
+
+
+
+  function get_package_months($id) {
+
+    $this->db->select('i_months');
+    $this->db->from('tb_packages');
+    $this->db->where('id_packages', $id );
+    $query = $this->db->get();
+    return $query->row_array();
+
+  }
 
   function general () {
 
-  $this->load->library('menu');
+    $this->load->library('menu');
 
-  # menu
-  $menu = new Menu;
-  $data['menu'] = $menu->show_menu();
+    # menu
+    $menu = new Menu;
+    $data['menu'] = $menu->show_menu();
 
-  return $data;
+    return $data;
   }
 
 

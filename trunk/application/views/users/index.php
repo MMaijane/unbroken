@@ -31,18 +31,15 @@
   </div>
 
   <div id="content">
-
   <?php 
-    echo anchor("packages/add", "crear").br();
+    echo anchor("users/subscribe", "nvo. cliente").br();
 
-    foreach ($packages as $key => $value) { 
-      echo anchor("packages/view/{$value['id_packages']}", $value['vc_package_name']); 
+    foreach ($users as $key => $value) { 
+      echo anchor("users/view/{$value['id_user']}", $value['vc_username']); 
     }  
   ?>
 
-
-
-  </div> 
+  </div>  
 
 
   <div id="footer">
@@ -50,5 +47,3 @@
   </div>
 </body>
 </html>
-
-    

@@ -15,7 +15,7 @@ CREATE TABLE `tb_subscriptions` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 
 
-
+DROP TABLE IF EXISTS tb_users ;
 CREATE TABLE `tb_users` (
   `id_user` int(11) NOT NULL AUTO_INCREMENT,
   `vc_username` varchar(50) COLLATE latin1_spanish_ci NOT NULL,
@@ -38,7 +38,7 @@ CREATE TABLE `tb_users` (
 
 
 
-
+DROP TABLE IF EXISTS tb_packages ;
 CREATE TABLE `tb_packages` (
  `id_packages` int(11) NOT NULL AUTO_INCREMENT,
  `vc_package_name` varchar(50) COLLATE latin1_spanish_ci NOT NULL,
