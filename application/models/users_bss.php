@@ -72,15 +72,12 @@ class Users_bss extends CI_Model {
   function view_user_by_id($id) {
     
 
-    $this->db->select('*');
-    $this->db->from('tb_users');
-    $this->db->join('tb_subscriptions subs', 'subs.id_user = usr.id_user');
-    $this->db->join('tb_packages pack', 'subs.id_package = pack.id_package');
-    $this->db->where('usr.id_user', $id );
-    $this->db->where('subs.b_status', '1' );
+    $query = $this->db->query("select * from tb_subscriptions subs ".
+                              "join tb_users usr on (usr.id_user = subs.id_user) ".
+                              "join tb_packages pack on (pack.id_packages = subs.id_package) ".
+                              "where usr.id_user= {$id} and subs.b_status=1");
 
-    $query = $this->db->get('tb_users');
-    return $query->result_array();
+    return $query->row_array();
 
   }
 

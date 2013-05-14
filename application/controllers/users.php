@@ -149,31 +149,15 @@ class Users extends CI_Controller{
 
     # get the action
     $action =  $this->uri->segment(4);
-
-    if ($action == 'change_status') {
-      $data['pack'] = $this->packages_bss->view_package($id);
-      $status = $data['pack']['b_status'] == 1 ? 0 : 1 ;
-
-      # change status
-      $this->change_status($id, $status);
-    }
-
-
-
-    $this->load->helper('form'); 
     $data = $this->users_bss->general();
-    $data['pack'] = $this->users_bss->view_user_by_id($id);
 
-    var_dump($data['pack']);
-    $this->load->view('packages/view_package', $data);
+    $data['user'] = $this->users_bss->view_user_by_id($id);
 
 
-
-    $this->load->helper('number_helper');
-    $this->load->model('subscribe_bss', '', TRUE);
-    $data['users'] = $this->subscribe_bss->get_users();
-    $this->load->view('welcome_message', $data);
+    $this->load->view('users/view_user', $data);
   }
+
+
 
 
   function deptors () {
