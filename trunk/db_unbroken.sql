@@ -9,6 +9,7 @@ CREATE TABLE `tb_subscriptions` (
  `id_package` int(11) NOT NULL,
  `dt_subscription` date NOT NULL,
  `dt_expires` date NOT NULL,
+ `b_slot` BOOL DEFAULT 1 NOT NULL,
  `b_status` tinyint(3) unsigned NOT NULL DEFAULT '0',
  PRIMARY KEY (`id_subscription`),
  KEY `id_user` (`id_user`)
