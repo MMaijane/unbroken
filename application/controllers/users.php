@@ -9,6 +9,10 @@
  view - ver un solo usuario 
 
 
+
+ pasar comentaro pasa mostar al index. no funciona el redirect con variables de php
+
+
 */
 
 
@@ -28,15 +32,11 @@ class Users extends CI_Controller{
     # get data
     $data = $this->users_bss->general();
     $data['users'] = $this->users_bss->get_users();
+    $data['message'] = $this->uri->segment(4);
 
-
-
-
-
-      #mandar a vista
+    #mandar a vista
     $this->load->view('users/index', $data);
   }
-
 
 
   //done
@@ -48,10 +48,8 @@ class Users extends CI_Controller{
 
     # return for the form
     if($this->input->post('new_subscription')) {
-
-
+      
       $date = date("Y-m-d");
-
       # tb_users
       $user_data = array(
         'vc_username'=>$this->input->post('vc_username'),
@@ -72,25 +70,18 @@ class Users extends CI_Controller{
       );
       $this->users_bss->insert_user($user_data);
 
-
-
       # obtain the expires date with the package id
       $package_months = $this->packages_bss->get_package_months($this->input->post('id_pack'));
       $user_id = $this->users_bss->get_user_id($this->input->post('vc_username'), $this->input->post('dt_birthday'));
       $expires = "+{$package_months['i_months']} month";
       $expires_date = date('Y-m-d', strtotime("{$expires}", strtotime($date)));
 
-
       # ver el corte (15 - 30)
       $day = date('d');
-      if ($day <= 15 && $day <= 7) {
-        $b_slot = 1; #30
-      } else if ($day <=15 && $day > 7) {
-        $b_slot = 2; #15
-      } else if ($day <= 30 && $day <= 23) {
-        $b_slot = 2; #15
-      } else {
-        $b_slot = 1; #30
+      if ($day <= 15 && $day <= 7) { $b_slot = 1; #30
+      } else if ($day <=15 && $day > 7) { $b_slot = 2; #15
+      } else if ($day <= 30 && $day <= 23) { $b_slot = 2; #15
+      } else { $b_slot = 1; #30
       }
 
       # tb_subscriptions
@@ -142,21 +133,103 @@ class Users extends CI_Controller{
   }
 
 
+  function renewal_subscription () {
+
+    $this->load->model('packages_bss');
+    $user_id = $this->input->post('id_user');
+    $date = date('Y-m-d');  
+
+    # verificar que no halla registro activo
+    $data['user'] = $this->users_bss->view_user_by_id($user_id);
+    if (!empty($data['user'])) {
+      
+      $data['error'] = "Se encuentra una subscription activa.";
+      redirect('/users/index/'.$data['error'], 'index', 301);
+
+    } else { #no hay subscription activa
+
+      # obtain the expires date with the package id
+      $package_months = $this->packages_bss->get_package_months($this->input->post('id_pack'));    
+      $expires = "+{$package_months['i_months']} month";
+      $expires_date = date('Y-m-d', strtotime("{$expires}", strtotime($date)));
+
+      # ver el corte (15 - 30)
+      $day = date('d');
+      if ($day <= 15 && $day <= 7) { $b_slot = 1; #30
+      } else if ($day <=15 && $day > 7) { $b_slot = 2; #15
+      } else if ($day <= 30 && $day <= 23) { $b_slot = 2; #15
+      } else { $b_slot = 1; #30
+      }
+
+      # tb_subscriptions
+      $subscription_data = array(
+        'id_user'=>$user_id,
+        'id_package'=>$this->input->post('id_pack'),
+        'dt_subscription'=>$date,
+        'dt_expires'=>$expires_date,
+        'b_slot'=>$b_slot,
+        'b_status'=>'1',
+      );
+      
+      $this->users_bss->insert_subscription($subscription_data);
+
+      $data['commnet'] = "Se regenero una subscripcion.";
+      redirect('/users/index/'.$data['commnet'], 'index', 301);
+    }
+  }
 
 
-  function view ($id) {
+  function view ($id_user) {
 
-
-    # get the action
-    $action =  $this->uri->segment(4);
     $data = $this->users_bss->general();
 
-    $data['user'] = $this->users_bss->view_user_by_id($id);
+    # setting variable
+    $data['action'] = "active";
+    $data['id_user'] = $id_user;
+    $data['user'] = $this->users_bss->view_user_by_id($id_user);
+
+    # if there's no subscription active print error
+    if (empty($data['user'])) {
+      $data['error'] = "No hay subscriptiones activas.";
+      
+      # offer renewal
+      $this->load->helper('form');  
+      $this->load->model('packages_bss');
+      $data['packages'] = $this->packages_bss->get_packages();
+
+      foreach ($data['packages'] as $key => $value) {
+        $data['packs'][] = array ($value['id_packages'] => $value['vc_package_name']);
+      }
+    }
 
 
+    # go to view
     $this->load->view('users/view_user', $data);
   }
 
+
+
+  function view_history ($id_user) {
+   
+    # get the action
+    $data = $this->users_bss->general();
+
+    # setting variable
+    $data['action'] = "history";
+    $data['id_user'] = $id_user;
+    $data['user'] = $this->users_bss->view_user_history_by_id($id_user);
+    
+
+    # if there's no subscription active print error
+    if (empty($data['user'])) {
+      $data['error'] = "No hay historial de subscriptiones.";
+    }
+
+
+    # go to view
+    $this->load->view('users/view_user', $data);
+
+  }
 
 
 

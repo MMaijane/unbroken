@@ -32,6 +32,8 @@
 
   <div id="content">
   <?php 
+
+    if (isset($message)) { echo $message.br(); } 
     echo anchor("users/subscribe", "nvo. cliente").br();
 
     foreach ($users as $key => $value) { 
