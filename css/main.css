@@ -1,35 +1,14 @@
 
 body {
-
 	background-color: black;
 }
 
-#content {
-  float:left; 
-  width:100%; 
-  height: 80%;
-  background-color: grey;
-  font: bold 18px Verdana; 
-  line-height:normal; 
-} 
 
-#menu ul {
-  font: bold 23px Verdana; 
-  background-color: green;
 
-}
 
-#footer { 
-	float:left; 
-	width:100%; 
-	height: 120px;
-	background-color: red;
-	font: bold 18px Verdana; 
-	line-height:normal; 
-	border: 1px;
-
-}
-
+/* 
+ ### header ###
+*/
 #header { 
 	float:left; 
 	width:100%; 
@@ -45,3 +24,113 @@ body {
 
 
 
+/* 
+ ### footer ###
+*/
+#footer { 
+	float:left; 
+	width:100%; 
+	height: 120px;
+	background-color: red;
+	font: bold 18px Verdana; 
+	line-height:normal; 
+	border: 1px;
+
+}
+
+
+
+/* 
+ ### menu ###
+*/
+#menu ul {
+  font: bold 23px Verdana; 
+  background-color: green;
+
+}
+
+
+/* 
+ ### header ###
+*/
+
+
+
+/* 
+ ### main content ###
+*/
+#content {
+  float:left; 
+  width:100%; 
+  height: 100%;
+  background-color: grey;
+  font: bold 18px Verdana; 
+  line-height:normal; 
+} 
+
+
+/*
+clases para visualizar el listado de socios /users/index
+para mostrat los principales y de ahi poder ir a ver el detalle de cada uno
+asi como poner el agregar cliente en la seccion de arriba derecha
+*/
+
+#main_table {
+	width: 80%;
+}
+
+.heading {
+	font-size: 14px;
+	text-align: center;
+}
+
+.data_rows {
+	font-size: 14px;
+	text-align: center;	
+}
+
+.data_rows_2 {
+	font-size: 14px;
+	text-align: center;	
+}
+
+
+#tb_new_user {
+	width: 100%;
+	background-color: red;
+}
+
+#tb_new_user td {
+	float: right;
+}
+
+
+/*
+clases para las tablas que estan en la pagina de view_users.php
+separan la tabla en 3 secciones para poder mostrar la imagen
+*/
+#inner_table {
+	width: 100%;
+}
+
+#inner_table td.inner_left{
+	text-align: right;
+	font-weight: bold;
+}
+
+#inner_table td.inner_photo {
+	width: 100%;
+}
+
+#main_table_single_user {
+	width: 100%;
+}
+
+.data_rows_single_user {
+	font-size: 14px;
+	text-align: center;	
+	width: 33%;
+}
+
+
+/**/

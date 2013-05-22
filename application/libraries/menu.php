@@ -6,7 +6,7 @@ class Menu{
   		$obj->load->helper('url');
   		$menu  = "<ul>";
       $menu .= "<li>";
-      $menu .= anchor("main","Inicio");
+      $menu .= anchor("main","Subscripciones");
       $menu .= "</li>";
   		$menu .= "<li>";
   		$menu .= anchor("users","Clientes");
