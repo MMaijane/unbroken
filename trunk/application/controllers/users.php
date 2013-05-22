@@ -23,6 +23,7 @@ class Users extends CI_Controller{
     $this->load->model('users_bss');
     $this->load->helper('url');
     $this->load->helper('html'); 
+    $this->load->library('table');
     $this->load->database();
   } 
 
@@ -33,6 +34,16 @@ class Users extends CI_Controller{
     $data = $this->users_bss->general();
     $data['users'] = $this->users_bss->get_users();
     $data['message'] = $this->uri->segment(4);
+
+
+    $this->load->library('pagination');
+    $config['base_url'] = base_url().'index.php/users/index/';
+    $config['total_rows'] = $this->db->count_all('tb_users');
+    $config['per_page'] = '10';
+    $config['full_tag_open'] = '<p>';
+    $config['full_tag_close'] = '</p>';
+    $this->pagination->initialize($config);
+
 
     #mandar a vista
     $this->load->view('users/index', $data);
@@ -183,7 +194,16 @@ class Users extends CI_Controller{
 
     $data = $this->users_bss->general();
 
-    # setting variable
+    #pagination    
+    $this->load->library('pagination');
+    $config['base_url'] = base_url().'index.php/users/index/';
+    $config['total_rows'] = $this->db->count_all('tb_users');
+    $config['per_page'] = '10';
+    $config['full_tag_open'] = '<p>';
+    $config['full_tag_close'] = '</p>';
+    $this->pagination->initialize($config);
+
+    # setting variables
     $data['action'] = "active";
     $data['id_user'] = $id_user;
     $data['user'] = $this->users_bss->view_user_by_id($id_user);
