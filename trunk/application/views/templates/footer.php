@@ -1,22 +1,12 @@
-<style> 
-#footer { 
-	float:left; 
-	width:100%; 
-	height: 120px;
-	background-color: red;
-	font: bold 18px Verdana; 
-	line-height:normal; 
-	border: 1px;
-} 
-</style>
-
+<html>
+<head>
+ <style> @import url('<?=base_url()?>css/main.css'); </style>
+</head>
+<body>
 <div id="footer">
 	footer
 </div>
+</body>
+</html>
 
 
-
-
-<?php
-
- ?>

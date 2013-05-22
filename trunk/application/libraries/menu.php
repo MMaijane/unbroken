@@ -5,6 +5,9 @@ class Menu{
   		$obj =& get_instance();
   		$obj->load->helper('url');
   		$menu  = "<ul>";
+      $menu .= "<li>";
+      $menu .= anchor("main","Inicio");
+      $menu .= "</li>";
   		$menu .= "<li>";
   		$menu .= anchor("users","Clientes");
   		$menu .= "</li>";
