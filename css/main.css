@@ -1,0 +1,47 @@
+
+body {
+
+	background-color: black;
+}
+
+#content {
+  float:left; 
+  width:100%; 
+  height: 80%;
+  background-color: grey;
+  font: bold 18px Verdana; 
+  line-height:normal; 
+} 
+
+#menu ul {
+  font: bold 23px Verdana; 
+  background-color: green;
+
+}
+
+#footer { 
+	float:left; 
+	width:100%; 
+	height: 120px;
+	background-color: red;
+	font: bold 18px Verdana; 
+	line-height:normal; 
+	border: 1px;
+
+}
+
+#header { 
+	float:left; 
+	width:100%; 
+	height: 200px;
+	background-image: url('http://localhost/unbroken/img/main/header.jpg');
+	background-position: center;
+	background-repeat: no-repeat;
+	background-color: black;
+	font: bold 18px Verdana; 
+	line-height:normal; 
+	border: 1px;
+} 
+
+
+
