@@ -70,14 +70,21 @@ class Users_bss extends CI_Model {
 
 
   function view_user_by_id($id) {
-    
+
+    $query = $this->db->query("select * from tb_users usr  ".
+                              "where usr.id_user= {$id} ");
+    return $query->row_array();
+  }
+
+
+  function view_active_package($id) {
+
     $query = $this->db->query("select * from tb_subscriptions subs ".
                               "join tb_users usr on (usr.id_user = subs.id_user) ".
                               "join tb_packages pack on (pack.id_packages = subs.id_package) ".
                               "where usr.id_user= {$id} and subs.b_status=1");
     return $query->row_array();
   }
-
 
 
   function view_user_history_by_id ($id) {
@@ -89,7 +96,6 @@ class Users_bss extends CI_Model {
                               "order by dt_subscription desc");
 
     return $query->result_array();
-
   }
 
 

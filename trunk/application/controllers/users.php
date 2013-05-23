@@ -10,7 +10,7 @@
 
 
 
- pasar comentaro pasa mostar al index. no funciona el redirect con variables de php
+ cambiar la base de datos para que aceepte d-m-y 
 
 
 */
@@ -60,7 +60,7 @@ class Users extends CI_Controller{
     # return for the form
     if($this->input->post('new_subscription')) {
       
-      $date = date("Y-m-d");
+      $date = date("d-m-Y");
       # tb_users
       $user_data = array(
         'vc_username'=>$this->input->post('vc_username'),
@@ -85,7 +85,7 @@ class Users extends CI_Controller{
       $package_months = $this->packages_bss->get_package_months($this->input->post('id_pack'));
       $user_id = $this->users_bss->get_user_id($this->input->post('vc_username'), $this->input->post('dt_birthday'));
       $expires = "+{$package_months['i_months']} month";
-      $expires_date = date('Y-m-d', strtotime("{$expires}", strtotime($date)));
+      $expires_date = date('d-m-Y', strtotime("{$expires}", strtotime($date)));
 
       # ver el corte (15 - 30)
       $day = date('d');
@@ -148,21 +148,20 @@ class Users extends CI_Controller{
 
     $this->load->model('packages_bss');
     $user_id = $this->input->post('id_user');
-    $date = date('Y-m-d');  
+    $date = date('d-m-Y');  
 
     # verificar que no halla registro activo
-    $data['user'] = $this->users_bss->view_user_by_id($user_id);
-    if (!empty($data['user'])) {
+    $data['active_pk'] = $this->users_bss->view_active_package($user_id);
+    if (!empty($data['active_pk'])) {
       
-      $data['error'] = "Se encuentra una subscription activa.";
-      redirect('/users/index/'.$data['error'], 'index', 301);
-
+      $msg = "Se encuentra una subscription activa.";
+      $this->view($user_id, $msg);
     } else { #no hay subscription activa
 
       # obtain the expires date with the package id
       $package_months = $this->packages_bss->get_package_months($this->input->post('id_pack'));    
       $expires = "+{$package_months['i_months']} month";
-      $expires_date = date('Y-m-d', strtotime("{$expires}", strtotime($date)));
+      $expires_date = date('d-m-Y', strtotime("{$expires}", strtotime($date)));
 
       # ver el corte (15 - 30)
       $day = date('d');
@@ -184,15 +183,16 @@ class Users extends CI_Controller{
       
       $this->users_bss->insert_subscription($subscription_data);
 
-      $data['commnet'] = "Se regenero una subscripcion.";
-      redirect('/users/index/'.$data['commnet'], 'index', 301);
+      $msg = "Se regenero una subscripcion exitosa.";
+      $this->view($user_id, $msg);
     }
   }
 
 
-  function view ($id_user) {
+  function view ($id_user, $msg='') {
 
     $data = $this->users_bss->general();
+
 
     #pagination    
     $this->load->library('pagination');
@@ -203,14 +203,23 @@ class Users extends CI_Controller{
     $config['full_tag_close'] = '</p>';
     $this->pagination->initialize($config);
 
-    # setting variables
-    $data['action'] = "active";
+
+
+    # get user data
+    $data['msg'] = $msg;
     $data['id_user'] = $id_user;
     $data['user'] = $this->users_bss->view_user_by_id($id_user);
-
-    # if there's no subscription active print error
     if (empty($data['user'])) {
-      $data['error'] = "No hay subscriptiones activas.";
+      $data['error']['user'] = "No Existe el Socio.";
+    }
+
+
+
+
+    # get active package
+    $data['active_pk'] = $this->users_bss->view_active_package($id_user);
+    if (empty($data['active_pk'])) {
+      $data['error']['active_pk'] = "No hay subscripciones activas.";
       
       # offer renewal
       $this->load->helper('form');  
@@ -223,33 +232,19 @@ class Users extends CI_Controller{
     }
 
 
-    # go to view
-    $this->load->view('users/view_user', $data);
-  }
 
-
-
-  function view_history ($id_user) {
-   
-    # get the action
-    $data = $this->users_bss->general();
-
-    # setting variable
-    $data['action'] = "history";
-    $data['id_user'] = $id_user;
-    $data['user'] = $this->users_bss->view_user_history_by_id($id_user);
-    
-
-    # if there's no subscription active print error
-    if (empty($data['user'])) {
-      $data['error'] = "No hay historial de subscriptiones.";
+    # get historial
+    $data['history_pk'] = $this->users_bss->view_user_history_by_id($id_user);
+    if (empty($data['history_pk'])) {
+      $data['error']['history_pk'] = "No hay historial de subscriptiones.";
     }
 
 
+
     # go to view
     $this->load->view('users/view_user', $data);
-
   }
+
 
 
 
