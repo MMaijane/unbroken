@@ -27,6 +27,12 @@
 
   //-- Content Rows
   foreach($users as $key => $value) {
+
+    #change the date form - from  yyyy-mm-dd to dd-mm-yyyy
+    $f = explode('-', $value['dt_birthday']);
+    $ff = $f[2].'-'.$f[1].'-'.$f[0];
+
+
     $this->table->add_row(
       $value['id_user'],
       anchor("users/view/{$value['id_user']}", $value['vc_username']." ".$value['vc_lastname']),
@@ -34,8 +40,7 @@
       $value['vc_msisdn'],
       $value['vc_email'],
       $value['vc_facebook'],
-      $value['dt_registry'],
-      anchor("users/edit/{$value['id_user']}", "editar")
+      $ff
     );
   } 
 ?>
@@ -45,6 +50,9 @@
  <style> @import url('<?=base_url()?>css/main.css'); </style>
 </head>
 <body>
+    <!-- notificacion -->
+  <p class='error'><?=$msg?> </p> 
+
   <div id="header">
     <?php $this->load->view('templates/header'); ?>
   </div>

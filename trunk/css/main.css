@@ -90,6 +90,7 @@ asi como poner el agregar cliente en la seccion de arriba derecha
 
 #main_table {
 	width: 80%;
+	font-size: 14px;
 }
 
 .heading {
@@ -129,6 +130,7 @@ separan la tabla en 3 secciones para poder mostrar la imagen
 #inner_table td.inner_left{
 	text-align: right;
 	font-weight: bold;
+	width: 150px;
 }
 
 #inner_table td.inner_photo {
@@ -146,4 +148,14 @@ separan la tabla en 3 secciones para poder mostrar la imagen
 }
 
 
-/**/
+/* table de paquete para nuevo usuario */
+#tb_package_new_user{
+	width: 33%;	
+}
+
+
+
+/* atributos para los anchor*/
+.anchor {
+	font-size: 12px;
+}

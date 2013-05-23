@@ -1,6 +1,7 @@
 <html>
 <head>
    <style> @import url('<?=base_url()?>css/main.css'); </style>
+   <script type="text/javascript" src="<?=base_url()?>js/birthdate.js"></script>
 </head>
 <body>
   <div id="header">
@@ -12,94 +13,59 @@
   </div>
 
   <div id="content">
-  <?php
-     echo form_open('users/subscribe'); 
-     echo $vc_username['key']     .' : '.form_input($vc_username['name']).br(); 
-     echo $vc_lastname['key']     .' : '.form_input($vc_lastname['name']).br(); 
-     echo $dt_birthday['key']     .' : '.form_input($dt_birthday['name']).br(); 
-     echo $vc_worknumber['key']   .' : '.form_input($vc_worknumber['name']).br(); 
-     echo $vc_phonenumber['key']  .' : '.form_input($vc_phonenumber['name']).br(); 
-     echo $vc_msisdn['key']       .' : '.form_input($vc_msisdn['name']).br(); 
-     echo $vc_street['key']       .' : '.form_input($vc_street['name']).br(); 
-     echo $vc_city['key']         .' : '.form_input($vc_city['name']).br(); 
-     echo $vc_state['key']        .' : '.form_input($vc_state['name']).br(); 
-     echo $i_cp['key']            .' : '.form_input($i_cp['name']).br(); 
-     echo $vc_country['key']      .' : '.form_input($vc_country['name']).br(); 
-     echo $vc_email['key']        .' : '.form_input($vc_email['name']).br(); 
-     echo $vc_facebook['key']     .' : '.form_input($vc_facebook['name']).br(); 
-     echo $vc_picture['key']      .' : '.form_input($vc_picture['name']).br(); 
-     echo "Paquete : "                  .form_dropdown('id_pack', $packs, 'large').br(); 
+    <table id="main_table_single_user"  border="1">
+      <tr><th class="heading">Nuevo Socio</th><th class="heading">Direccion</th></tr>
+      <tr>
+        <td class="data_rows_single_user">
+          <table id="inner_table" border="0" >
+            <?=form_open('users/subscribe')?>
+            <tr><td class="inner_left"><?=$vc_username['key'].' : '?></td><td><?=form_input($vc_username['name'])?></td></tr>
+            <tr><td class="inner_left"><?=$vc_lastname['key'].' : '?></td><td><?=form_input($vc_lastname['name'])?></td></tr>
+            <tr><td class="inner_left"><?=$dt_birthday['key'].' : '?></td><td><SELECT id ="date" name = "dd" ></SELECT>
+                                                                      <SELECT id ="month" name = "mm" ></SELECT>
+                                                                      <SELECT id ="year" name = "yyyy" ></SELECT></td></tr>
+            <tr><td class="inner_left">Tel. <?=$vc_worknumber['key'].' : '?></td><td><?=form_input($vc_worknumber['name'])?></td></tr>
+            <tr><td class="inner_left">Tel. <?=$vc_phonenumber['key'].' : '?></td><td><?=form_input($vc_phonenumber['name'])?></td></tr>
+            <tr><td class="inner_left"><?=$vc_msisdn['key'].' : '?></td><td><?=form_input($vc_msisdn['name'])?></td></tr>
+          </table>
+        </td>
+        <td class="data_rows_single_user">
+          <table id="inner_table" border="0" >
+            <tr><td class="inner_left"><?=$vc_street['key'].' : '?></td><td><?=form_input($vc_street['name'])?></td></tr>
+            <tr><td class="inner_left"><?=$vc_city['key'].' : '?></td><td><?=form_input($vc_city['name'])?></td></tr>
+            <tr><td class="inner_left"><?=$vc_state['key'].' : '?></td><td><?=form_input($vc_state['name'])?></td></tr>
+            <tr><td class="inner_left"><?=$i_cp['key'].' : '?></td><td><?=form_input($i_cp['name'])?></td></tr>
+            <tr><td class="inner_left"><?=$vc_country['key'].' : '?></td><td><?=form_input($vc_country['name'])?></td></tr>
+            <tr><td class="inner_left"><?=$vc_email['key'].' : '?></td><td><?=form_input($vc_email['name'])?></td></tr>
+            <tr><td class="inner_left"><?=$vc_facebook['key'].' : '?></td><td><?=form_input($vc_facebook['name'])?></td></tr>
+          </table>
+        </td>
+        <td class="data_rows_single_user">
+          <table id="inner_table" >
+            <tr>
+              <td class="inner_photo"><div id="header"></div></td>
+            </tr>
+              <!-- poner la foto aqui -->
+          </table>
+        </td>
+      </tr>
+    </table><br>
 
-     echo base_url();
-  ?>
-  
-    <!-- First, include the JPEGCam JavaScript Library -->
-  <script type="text/javascript" src="<?=base_url()?>camera/webcam.js"></script>
-  
-  <!-- Configure a few settings -->
-  <script language="JavaScript">
+    <script type="text/javascript">date_populate("date", "month", "year");</script>
 
-    webcam.set_api_url( 'camera/capture.php' );
-    webcam.set_quality( 90 ); // JPEG quality (1 - 100)
-    webcam.set_shutter_sound( true ); // play shutter click sound
-  </script>
-  
-  <!-- Next, write the movie to the page at 320x240 -->
-  <script language="JavaScript">
-    document.write( webcam.get_html(320, 240) );
-  </script>
-
-
-
-  <input type=button value="Configure..." onClick="webcam.configure()">
-    &nbsp;&nbsp;
-    <input type=button value="Take Snapshot" onClick="take_snapshot()">
-
-
-
-
-
-
-  <script language="JavaScript">
-    webcam.set_hook( 'onComplete', 'my_completion_handler' );
+    <table id="tb_package_new_user"  border="1">
+      <tr><th class="heading">Paquete</th></tr>
+      <tr>
+        <td>
+          <table id="inner_table" border='0'>
+            <tr><td class="inner_left">Paquete : </td><td><?=form_dropdown('id_pack', $packs, 'large')?></td></tr>
+          </table>
+        </td>
+      </tr>
+    </table><br>
     
-    function take_snapshot() {
-      // take snapshot and upload to server
-      document.getElementById('upload_results').innerHTML = '<h1>Uploading...</h1>';
-      webcam.snap();
-    }
-    
-    function my_completion_handler(msg) {
-      // extract URL out of PHP output
-      if (msg.match(/(http\:\/\/\S+)/)) {
-        var image_url = RegExp.$1;
-        // show JPEG image in page
-        document.getElementById('upload_results').innerHTML = 
-          '<h1>Upload Successful!</h1>' + 
-          '<h3>JPEG URL: ' + image_url + '</h3>' + 
-          '<img src="' + image_url + '">';
-        
-        // reset camera for another shot
-        webcam.reset();
-      }
-      else alert("PHP Error: " + msg);
-    }
-  </script>
-  
-  </td><td width=50>&nbsp;</td><td valign=top>
-    <div id="upload_results" style="background-color:#eee;"></div>
-  </td></tr></table>
-
-
-
-
-
-
-
-  <?php   
-     echo form_submit('new_subscription','Submit!');  
-     echo form_close(); 
-  ?>
+    <?=form_submit('new_subscription','Registrar!')?>
+    <?=form_close()?>
 
   </div> 
 
