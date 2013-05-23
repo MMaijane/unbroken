@@ -54,14 +54,21 @@ class Users_bss extends CI_Model {
   }
 
 
+
+  function update_user($id_user, $subscription_data) {
+
+    $this->db->where('id_user', $id_user);
+    $this->db->update('tb_users', $subscription_data);
+  }
+
+
+
   //done
   function get_user_id($vc_username, $dt_birthday) {
 
-    $this->db->select('id_user');
-    $this->db->from('tb_users');
-    $this->db->where('vc_username', $vc_username );
-    $this->db->where('dt_birthday', $dt_birthday );
-    $query = $this->db->get();
+
+    $query = $this->db->query("select id_user from tb_users usr ".                        
+                              "order by id_user desc");
 
     return $query->row_array();    
   }

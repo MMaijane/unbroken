@@ -28,12 +28,13 @@ class Users extends CI_Controller{
   } 
 
 
-  function index() {
+  function index($msg='') {
 
     # get data
     $data = $this->users_bss->general();
     $data['users'] = $this->users_bss->get_users();
     $data['message'] = $this->uri->segment(4);
+    $data['msg'] = $msg;
 
 
     $this->load->library('pagination');
@@ -60,85 +61,88 @@ class Users extends CI_Controller{
     # return for the form
     if($this->input->post('new_subscription')) {
       
-      $date = date("d-m-Y");
-      # tb_users
-      $user_data = array(
-        'vc_username'=>$this->input->post('vc_username'),
-        'vc_lastname'=>$this->input->post('vc_lastname'),
-        'dt_birthday'=>$this->input->post('dt_birthday'),
-        'vc_worknumber'=>$this->input->post('vc_worknumber'),
-        'vc_phonenumber'=>$this->input->post('vc_phonenumber'),
-        'vc_msisdn'=>$this->input->post('vc_msisdn'),
-        'vc_street'=>$this->input->post('vc_street'),
-        'vc_city'=>$this->input->post('vc_city'),
-        'vc_state'=>$this->input->post('vc_state'),
-        'i_cp'=>$this->input->post('i_cp'),
-        'vc_country'=>$this->input->post('vc_country'),
-        'vc_email'=>$this->input->post('vc_email'),
-        'vc_facebook'=>$this->input->post('vc_facebook'),
-        'dt_registry'=>$date,
-        'vc_picture'=>$this->input->post('vc_picture'),
-      );
-      $this->users_bss->insert_user($user_data);
+            $date = date("Y-m-d");
+            $dt_birthday = $this->input->post('yyyy').'-'.$this->input->post('mm').'-'.$this->input->post('dd');
 
-      # obtain the expires date with the package id
-      $package_months = $this->packages_bss->get_package_months($this->input->post('id_pack'));
-      $user_id = $this->users_bss->get_user_id($this->input->post('vc_username'), $this->input->post('dt_birthday'));
-      $expires = "+{$package_months['i_months']} month";
-      $expires_date = date('d-m-Y', strtotime("{$expires}", strtotime($date)));
+            # tb_users
+            $user_data = array(
+              'vc_username'=>$this->input->post('vc_username'),
+              'vc_lastname'=>$this->input->post('vc_lastname'),
+              'dt_birthday'=>$dt_birthday,        
+              'vc_worknumber'=>$this->input->post('vc_worknumber'),
+              'vc_phonenumber'=>$this->input->post('vc_phonenumber'),
+              'vc_msisdn'=>$this->input->post('vc_msisdn'),
+              'vc_street'=>$this->input->post('vc_street'),
+              'vc_city'=>$this->input->post('vc_city'),
+              'vc_state'=>$this->input->post('vc_state'),
+              'i_cp'=>$this->input->post('i_cp'),
+              'vc_country'=>$this->input->post('vc_country'),
+              'vc_email'=>$this->input->post('vc_email'),
+              'vc_facebook'=>$this->input->post('vc_facebook'),
+              'dt_registry'=>$date,
+              'vc_picture'=>$this->input->post('vc_picture'),
+            );
+            
+            $this->users_bss->insert_user($user_data);
 
-      # ver el corte (15 - 30)
-      $day = date('d');
-      if ($day <= 15 && $day <= 7) { $b_slot = 1; #30
-      } else if ($day <=15 && $day > 7) { $b_slot = 2; #15
-      } else if ($day <= 30 && $day <= 23) { $b_slot = 2; #15
-      } else { $b_slot = 1; #30
-      }
+            # obtain the expires date with the package id
+            $package_months = $this->packages_bss->get_package_months($this->input->post('id_pack'));
+            $user_id = $this->users_bss->get_user_id($this->input->post('vc_username'), $this->input->post('dt_birthday'));
+            $expires = "+{$package_months['i_months']} month";
+            $expires_date = date('Y-m-d', strtotime("{$expires}", strtotime($date)));
 
-      # tb_subscriptions
-      $subscription_data = array(
-        'id_user'=>$user_id['id_user'],
-        'id_package'=>$this->input->post('id_pack'),
-        'dt_subscription'=>$date,
-        'dt_expires'=>$expires_date,
-        'b_slot'=>$b_slot,
-        'b_status'=>'1',
-      );
-    
-      $this->users_bss->insert_subscription($subscription_data);
+            # ver el corte (15 - 30)
+            $day = date('d');
+            if ($day <= 15 && $day <= 7) { $b_slot = 1; #30
+            } else if ($day <=15 && $day > 7) { $b_slot = 2; #15
+            } else if ($day <= 30 && $day <= 23) { $b_slot = 2; #15
+            } else { $b_slot = 1; #30
+            }
 
-      redirect('/users/index', 'index', 301);
+            # tb_subscriptions
+            $subscription_data = array(
+              'id_user'=>$user_id['id_user'],
+              'id_package'=>$this->input->post('id_pack'),
+              'dt_subscription'=>$date,
+              'dt_expires'=>$expires_date,
+              'b_slot'=>$b_slot,
+              'b_status'=>'1',
+            );
+          
+            $this->users_bss->insert_subscription($subscription_data);
 
-        /* redirecto to index whit popup */
+            $msg = "Se genero una subscripcion exitosa.";
+            $this->index($msg);
+
     } else {
 
-      #new subscription
-      $data = $this->users_bss->general();
-      $data['packages'] = $this->packages_bss->get_packages();
+            #new subscription
+            $data = $this->users_bss->general();
+            $data['packages'] = $this->packages_bss->get_packages();
+            $data['packs'] = array();
+            foreach ($data['packages'] as $key => $value) {
 
-      foreach ($data['packages'] as $key => $value) {
-        $data['packs'][] = array ($value['id_packages'] => $value['vc_package_name']);
-      }
+                $data['packs'][$value['id_packages']] = $value['vc_package_name'];              
+            }
 
+            # data fileds
+            $data['vc_username']    = array('name'=>'vc_username', 'size'=>30, 'key'=>'Nombre');    
+            $data['vc_lastname']    = array('name'=>'vc_lastname', 'size'=>30, 'key'=>'Apellidos');
+            $data['dt_birthday']    = array('name'=>'dt_birthday', 'size'=>30, 'key'=>'Fecha de nac.');
+            $data['vc_worknumber']  = array('name'=>'vc_worknumber', 'size'=>15, 'key'=>'Oficina');
+            $data['vc_phonenumber'] = array('name'=>'vc_phonenumber', 'size'=>15, 'key'=>'Particular');
+            $data['vc_msisdn']      = array('name'=>'vc_msisdn', 'size'=>15, 'key'=>'Celular');
+            $data['vc_street']      = array('name'=>'vc_street', 'size'=>30, 'key'=>'Calle');
+            $data['vc_city']        = array('name'=>'vc_city', 'size'=>30, 'key'=>'Ciudad');
+            $data['vc_state']       = array('name'=>'vc_state', 'size'=>30, 'key'=>'Estado');
+            $data['i_cp']           = array('name'=>'i_cp', 'size'=>7, 'key'=>'CP.');
+            $data['vc_country']     = array('name'=>'vc_country', 'size'=>30, 'key'=>'Pais');
+            $data['vc_email']       = array('name'=>'vc_email', 'size'=>40, 'key'=>'E-mail');
+            $data['vc_facebook']    = array('name'=>'vc_facebook', 'size'=>30, 'key'=>'Facebook');
+            $data['vc_picture']     = array('name'=>'vc_picture', 'size'=>40, 'key'=>'Imagen');
+              
 
-      # data fileds
-      $data['vc_username']    = array('name'=>'vc_username', 'size'=>30, 'key'=>'Nombre');    
-      $data['vc_lastname']    = array('name'=>'vc_lastname', 'size'=>30, 'key'=>'Apellidos');
-      $data['dt_birthday']    = array('name'=>'dt_birthday', 'size'=>30, 'key'=>'Fecha de nacimiento');
-      $data['vc_worknumber']  = array('name'=>'vc_worknumber', 'size'=>15, 'key'=>'Oficina');
-      $data['vc_phonenumber'] = array('name'=>'vc_phonenumber', 'size'=>15, 'key'=>'Particular');
-      $data['vc_msisdn']      = array('name'=>'vc_msisdn', 'size'=>15, 'key'=>'Celular');
-      $data['vc_street']      = array('name'=>'vc_street', 'size'=>30, 'key'=>'Calle');
-      $data['vc_city']        = array('name'=>'vc_city', 'size'=>30, 'key'=>'Ciudad');
-      $data['vc_state']       = array('name'=>'vc_state', 'size'=>30, 'key'=>'Estado');
-      $data['i_cp']           = array('name'=>'i_cp', 'size'=>7, 'key'=>'CP.');
-      $data['vc_country']     = array('name'=>'vc_country', 'size'=>30, 'key'=>'Pais');
-      $data['vc_email']       = array('name'=>'vc_email', 'size'=>40, 'key'=>'E-mail');
-      $data['vc_facebook']    = array('name'=>'vc_facebook', 'size'=>30, 'key'=>'Facebook');
-      $data['vc_picture']     = array('name'=>'vc_picture', 'size'=>40, 'key'=>'Imagen');
-        
-
-      $this->load->view('users/new_subscription', $data); 
+            $this->load->view('users/new_subscription', $data); 
     }
   		/* validacion si es nueva inscripcion o re inscripcion */
   }
@@ -148,43 +152,43 @@ class Users extends CI_Controller{
 
     $this->load->model('packages_bss');
     $user_id = $this->input->post('id_user');
-    $date = date('d-m-Y');  
+    $date = date('Y-m-d');  
 
     # verificar que no halla registro activo
     $data['active_pk'] = $this->users_bss->view_active_package($user_id);
     if (!empty($data['active_pk'])) {
       
-      $msg = "Se encuentra una subscription activa.";
-      $this->view($user_id, $msg);
+          $msg = "Se encuentra una subscription activa.";
+          $this->view($user_id, $msg);
     } else { #no hay subscription activa
 
-      # obtain the expires date with the package id
-      $package_months = $this->packages_bss->get_package_months($this->input->post('id_pack'));    
-      $expires = "+{$package_months['i_months']} month";
-      $expires_date = date('d-m-Y', strtotime("{$expires}", strtotime($date)));
+          # obtain the expires date with the package id
+          $package_months = $this->packages_bss->get_package_months($this->input->post('id_pack'));    
+          $expires = "+{$package_months['i_months']} month";
+          $expires_date = date('Y-m-d', strtotime("{$expires}", strtotime($date)));
 
-      # ver el corte (15 - 30)
-      $day = date('d');
-      if ($day <= 15 && $day <= 7) { $b_slot = 1; #30
-      } else if ($day <=15 && $day > 7) { $b_slot = 2; #15
-      } else if ($day <= 30 && $day <= 23) { $b_slot = 2; #15
-      } else { $b_slot = 1; #30
-      }
+          # ver el corte (15 - 30)
+          $day = date('d');
+          if ($day <= 15 && $day <= 7) { $b_slot = 1; #30
+          } else if ($day <=15 && $day > 7) { $b_slot = 2; #15
+          } else if ($day <= 30 && $day <= 23) { $b_slot = 2; #15
+          } else { $b_slot = 1; #30
+          }
 
-      # tb_subscriptions
-      $subscription_data = array(
-        'id_user'=>$user_id,
-        'id_package'=>$this->input->post('id_pack'),
-        'dt_subscription'=>$date,
-        'dt_expires'=>$expires_date,
-        'b_slot'=>$b_slot,
-        'b_status'=>'1',
-      );
-      
-      $this->users_bss->insert_subscription($subscription_data);
+          # tb_subscriptions
+          $subscription_data = array(
+            'id_user'=>$user_id,
+            'id_package'=>$this->input->post('id_pack'),
+            'dt_subscription'=>$date,
+            'dt_expires'=>$expires_date,
+            'b_slot'=>$b_slot,
+            'b_status'=>'1',
+          );
+          
+          $this->users_bss->insert_subscription($subscription_data);
 
-      $msg = "Se regenero una subscripcion exitosa.";
-      $this->view($user_id, $msg);
+          $msg = "Se renovo una subscripcion exitosa.";
+          $this->view($user_id, $msg);
     }
   }
 
@@ -192,18 +196,6 @@ class Users extends CI_Controller{
   function view ($id_user, $msg='') {
 
     $data = $this->users_bss->general();
-
-
-    #pagination    
-    $this->load->library('pagination');
-    $config['base_url'] = base_url().'index.php/users/index/';
-    $config['total_rows'] = $this->db->count_all('tb_users');
-    $config['per_page'] = '10';
-    $config['full_tag_open'] = '<p>';
-    $config['full_tag_close'] = '</p>';
-    $this->pagination->initialize($config);
-
-
 
     # get user data
     $data['msg'] = $msg;
@@ -226,9 +218,11 @@ class Users extends CI_Controller{
       $this->load->model('packages_bss');
       $data['packages'] = $this->packages_bss->get_packages();
 
-      foreach ($data['packages'] as $key => $value) {
-        $data['packs'][] = array ($value['id_packages'] => $value['vc_package_name']);
-      }
+        $data['packs'] = array();
+        foreach ($data['packages'] as $key => $value) {
+
+          $data['packs'][$value['id_packages']] = $value['vc_package_name'];              
+        }
     }
 
 
@@ -246,6 +240,64 @@ class Users extends CI_Controller{
   }
 
 
+
+  function edit ($id_user) {
+    $this->load->helper('form');  
+    $data = $this->users_bss->general();
+
+    $data['id_user'] = $id_user;
+    $data['user'] = $this->users_bss->view_user_by_id($id_user);
+    if (empty($data['user'])) {
+      $data['error']['user'] = "No Existe el Socio.";
+    }
+
+    
+    # si viene de una actualizacion 
+    if($this->input->post('edit_user')) {
+
+          # tb_users
+          $user_data = array(
+            'vc_username'=>$this->input->post('vc_username'),
+            'vc_lastname'=>$this->input->post('vc_lastname'),
+            'vc_worknumber'=>$this->input->post('vc_worknumber'),
+            'vc_phonenumber'=>$this->input->post('vc_phonenumber'),
+            'vc_msisdn'=>$this->input->post('vc_msisdn'),
+            'vc_street'=>$this->input->post('vc_street'),
+            'vc_city'=>$this->input->post('vc_city'),
+            'vc_state'=>$this->input->post('vc_state'),
+            'i_cp'=>$this->input->post('i_cp'),
+            'vc_country'=>$this->input->post('vc_country'),
+            'vc_email'=>$this->input->post('vc_email'),
+            'vc_facebook'=>$this->input->post('vc_facebook'),
+            'vc_picture'=>$this->input->post('vc_picture'),
+          );
+
+          $this->users_bss->update_user($id_user, $user_data);
+
+          $msg = "Se Modifico el usuario con exito.";
+          $this->view($id_user ,$msg);
+
+    } else {
+          # data fileds
+          $data['vc_username']    = array('name'=>'vc_username', 'size'=>30, 'key'=>'Nombre', 'value'=>$data['user']['vc_username']);    
+          $data['vc_lastname']    = array('name'=>'vc_lastname', 'size'=>30, 'key'=>'Apellidos', 'value'=>$data['user']['vc_lastname']);
+          $data['dt_birthday']    = array('name'=>'dt_birthday', 'size'=>30, 'key'=>'Fecha de nac.', 'value'=>$data['user']['dt_birthday']);
+          $data['vc_worknumber']  = array('name'=>'vc_worknumber', 'size'=>15, 'key'=>'Oficina', 'value'=>$data['user']['vc_worknumber']);
+          $data['vc_phonenumber'] = array('name'=>'vc_phonenumber', 'size'=>15, 'key'=>'Particular', 'value'=>$data['user']['vc_phonenumber']);
+          $data['vc_msisdn']      = array('name'=>'vc_msisdn', 'size'=>15, 'key'=>'Celular', 'value'=>$data['user']['vc_msisdn']);
+          $data['vc_street']      = array('name'=>'vc_street', 'size'=>30, 'key'=>'Calle', 'value'=>$data['user']['vc_street']);
+          $data['vc_city']        = array('name'=>'vc_city', 'size'=>30, 'key'=>'Ciudad', 'value'=>$data['user']['vc_city']);
+          $data['vc_state']       = array('name'=>'vc_state', 'size'=>30, 'key'=>'Estado', 'value'=>$data['user']['vc_state']);
+          $data['i_cp']           = array('name'=>'i_cp', 'size'=>7, 'key'=>'CP.', 'value'=>$data['user']['i_cp']);
+          $data['vc_country']     = array('name'=>'vc_country', 'size'=>30, 'key'=>'Pais', 'value'=>$data['user']['vc_country']);
+          $data['vc_email']       = array('name'=>'vc_email', 'size'=>40, 'key'=>'E-mail', 'value'=>$data['user']['vc_email']);
+          $data['vc_facebook']    = array('name'=>'vc_facebook', 'size'=>30, 'key'=>'Facebook', 'value'=>$data['user']['vc_facebook']);
+          $data['vc_picture']     = array('name'=>'vc_picture', 'size'=>40, 'key'=>'Imagen', 'value'=>$data['user']['vc_picture']);
+
+          # go to view
+          $this->load->view('users/edit_user', $data);
+    }
+  }
 
 
   function deptors () {
