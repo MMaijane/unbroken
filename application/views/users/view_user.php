@@ -18,55 +18,43 @@
     'table_close'         => '</table>'
   );
 
-  # tabla de datos principales  
-/*  $this->table->set_template($tmpl);    
-  $this->table->set_caption("Datos Principales");
-  //-- Header Row
-  $this->table->set_heading('# Socio', 'Nombre', 'F. nacimiento', 'Tel. Casa', 'Celular', 'Tel. Trabajo', 'Registro');
-  $this->table->add_row(
-    $user['id_user'],
-    $user['vc_username']." ".$user['vc_lastname'],
-    $user['dt_birthday'],
-    $user['vc_phonenumber'],
-    $user['vc_msisdn'],
-    $user['vc_worknumber'],
-    $user['dt_registry']
-  );
-  $main_data = $this->table->generate();
-  $this->table->clear(); 
+
+  # paquetes activos
+  if (!isset($error['active_pk'])) {
+    # table of active package
+    $this->table->set_template($tmpl);    
+    $this->table->set_caption("Subscripcion Activa");
+    $this->table->set_heading('Subscripcion', 'Descripcion', 'F. Subscripcion', 'F. Expiracion');
+    $this->table->add_row(
+        $active_pk['vc_package_name'],
+        $active_pk['vc_description'],
+        $active_pk['dt_subscription'],
+        $active_pk['dt_expires']      
+      );
+    $active_package = $this->table->generate();
+    $this->table->clear(); 
+  }
 
 
-  # table of adress
-  $this->table->set_template($tmpl);    
-  $this->table->set_caption("Direccion");
-  $this->table->set_heading('Calle', 'Ciudad', 'Estado', 'CP.', 'Pais', 'Email', 'Facebook');
-  $this->table->add_row(
-      $user['vc_street'],
-      $user['vc_city'],
-      $user['vc_state'],
-      $user['i_cp'],
-      $user['vc_country'],
-      $user['vc_email'],
-      $user['vc_facebook']
-    );
-  $adress = $this->table->generate();
-  $this->table->clear(); 
-*/
+  # historial de paquetes
+  if (!isset($error['history_pk'])) {
+    # table of active package
+    $this->table->set_template($tmpl);    
+    $this->table->set_caption("Historial de Subscripciones");
+    $this->table->set_heading('Subscripcion', 'Descripcion', 'F. Subscripcion', 'F. Expiracion');
 
+    foreach ($history_pk as $key => $val) {
+      $this->table->add_row(
+          $val['vc_package_name'],
+          $val['vc_description'],
+          $val['dt_subscription'],
+          $val['dt_expires']      
+        );
+    }
 
-  # table of active package
-  $this->table->set_template($tmpl);    
-  $this->table->set_caption("Paquete Activo");
-  $this->table->set_heading('Paquete', 'Descripcion', 'F. Subscripcion', 'F. Expiracion');
-  $this->table->add_row(
-      $user['vc_package_name'],
-      $user['vc_description'],
-      $user['dt_subscription'],
-      $user['dt_expires']      
-    );
-  $active_package = $this->table->generate();
-  $this->table->clear(); 
-
+    $history_package = $this->table->generate();
+    $this->table->clear(); 
+  }
 
 
 
@@ -78,33 +66,40 @@
 
 <html>
 <head>
- <style> @import url('<?=base_url()?>css/main.css'); </style>
+  <style> @import url('<?=base_url()?>css/main.css'); </style>
+  <script type="text/javascript">
+    function ShowHistory() {
+      var div = document.getElementById('HistoryDiv');
+      if (div.style.display !== 'none') {
+          div.style.display = 'none';
+      } else {
+        div.style.display = 'block';
+      }
+    };
+  </script>
 </head>
 <body>
+  <!-- notificacion -->
+  <p class='error'><?=$msg?> </p> 
+
+
   <div id="header">
     <?php $this->load->view('templates/header'); ?>
   </div>
+
 
   <div id="menu">
     <?php echo $menu; ?>
   </div>
 
+
   <div id="content">
   <?php   
-
-    switch ($action) {
-      case 'active':  # si hay registros activos, function view
-        if (isset($error)) { 
-        
-          echo $error.br();
-          $hidden = array('id_user' => $id_user);
-          echo form_open('users/renewal_subscription', '', $hidden); 
-            echo "Renovar? : ".form_dropdown('id_pack', $packs); 
-            echo form_submit('renewal_subscription','Renovar!');  
-          echo form_close();  
-          
+  
+        # si no exite el usuario
+        if (isset($error['user'])) { ?>
+          <p class='error'><?=$error['user'].br()?> </p> <?php #error
         } else { ?>
-
 
           <table id="main_table_single_user"  border="1">
             <tr><th class="heading">Datos Principales</th><th class="heading">Direccion</th></tr>
@@ -140,58 +135,40 @@
                 </table>
               </td>
             </tr>
-          </table><br>
+          </table><br><?php
 
-<?php
 
-         # echo $main_data.br();
-         # echo $adress.br();
-          echo $active_package.br();
-        }
-        echo anchor("users/view_history/{$id_user}", "Ver historial");  
-      break;
-      case 'history': # si se quiere ver el historial function view_history
-        if (isset($error)) { echo $error.br(); } 
-        else {
-          foreach ($user as $key => $value) {
-            echo "Datos principales".br();
-            echo $value['vc_username'].br();
-            echo $value['vc_lastname'].br();
-            echo $value['dt_birthday'].br();
-            echo $value['vc_worknumber'].br();
-            echo $value['vc_phonenumber'].br();
-            echo $value['vc_msisdn'].br();
 
-            echo "Direccion".br();
-            echo $value['vc_street'].br();
-            echo $value['vc_city'].br();
-            echo $value['vc_state'].br();
-            echo $value['i_cp'].br();
-            echo $value['vc_country'].br();
+          # si no tiene paquete activo
+          if (isset($error['active_pk'])) { ?>
+            <p class='error'><?=$error['active_pk'].br()?> </p> <?php #error
             
-            echo "Web".br();
-            echo $value['vc_email'].br();
-            echo $value['vc_facebook'].br(); 
-
-            echo "Registro".br();
-            echo $value['dt_registry'].br();
-            echo $value['vc_picture'].br(); 
-            
-            echo "Paquete".br();
-            echo $value['vc_package_name'].br();
-            echo $value['vc_description'].br(); 
-            echo $value['dt_subscription'].br();
-            echo $value['dt_expires'].br(); 
+            # ofer new package
+            $attributes = array('class' => 'offer_package' );
+            $hidden = array('id_user' => $id_user);
+            echo form_open('users/renewal_subscription', $attributes, $hidden); 
+            echo "Renovar? : ".form_dropdown('id_pack', $packs); 
+            echo form_submit('renewal_subscription','Renovar!');  
+            echo form_close();  
+          } else {
+            echo $active_package.br();
           }
-        }
-      break;
-      
-      default:
-        # code...
-        break;
-    }
+        } ?>
 
-  ?>
+
+        <!-- ver historial -->
+        <a href='#' OnClick='ShowHistory()'>Ver Historial</a>
+        <div id='HistoryDiv' style='display:none;'>
+          <?php          
+            if (isset($error['history_pk'])) { ?>
+              <p class='error'><?=$error['history_pk'].br()?> </p> <?php #error
+            } else {
+              echo $history_package.br();
+            }
+          ?>
+        </div>
+
+
   </div> 
 
 

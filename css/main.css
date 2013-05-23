@@ -5,6 +5,19 @@ body {
 
 
 
+/* error */
+.error {
+	color: red;
+	text-align: center;
+	font-size: 20px;
+}
+
+
+/*  oofer package */
+.offer_package{
+	text-align: center;
+}
+
 
 /* 
  ### header ###
