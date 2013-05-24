@@ -118,7 +118,7 @@ class Users extends CI_Controller{
 
             #new subscription
             $data = $this->users_bss->general();
-            $data['packages'] = $this->packages_bss->get_packages();
+            $data['packages'] = $this->packages_bss->get_active_packages();
             $data['packs'] = array();
             foreach ($data['packages'] as $key => $value) {
 
@@ -216,7 +216,7 @@ class Users extends CI_Controller{
       # offer renewal
       $this->load->helper('form');  
       $this->load->model('packages_bss');
-      $data['packages'] = $this->packages_bss->get_packages();
+      $data['packages'] = $this->packages_bss->get_active_packages();
 
         $data['packs'] = array();
         foreach ($data['packages'] as $key => $value) {

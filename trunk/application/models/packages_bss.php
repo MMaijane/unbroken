@@ -15,8 +15,16 @@ class Packages_bss extends CI_Model {
 
 
   function get_packages() {
+    $query = $this->db->query("select * from tb_packages pk  ".
+                              "order by pk.b_status desc ");
+    return $query->result_array();
+  }
 
-    $query = $this->db->get('tb_packages');
+
+
+  function get_active_packages() {
+
+    $query = $this->db->get_where('tb_packages', array('b_status' => '1'));
 
     return $query->result_array();
   }
@@ -24,15 +32,7 @@ class Packages_bss extends CI_Model {
 
 
 
-  function insert_package() {
-
-    $data = array(
-      'vc_package_name'=>$this->input->post('vc_package_name'),
-      'vc_description'=>$this->input->post('vc_description'),
-      'i_months'=>$this->input->post('i_months'),
-      'i_price'=>$this->input->post('i_price'),
-      'dt_created'=>date('y-m-d'),
-    );
+  function insert_package($data) {
 
     $this->db->insert('tb_packages', $data);
   }
