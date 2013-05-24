@@ -12,7 +12,7 @@
     <?php echo $menu; ?>
   </div>
 
-  <div id="content">
+  <div id="content"><br>
     <table id="main_table_single_user"  border="1">
       <tr><th class="heading">Nuevo Socio</th><th class="heading">Direccion</th></tr>
       <tr>

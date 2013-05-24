@@ -159,3 +159,32 @@ separan la tabla en 3 secciones para poder mostrar la imagen
 .anchor {
 	font-size: 12px;
 }
+
+
+
+
+
+
+
+/* CSS de las tablas de pacquetes */
+
+#main_table_pack {
+	width: 40%;
+}
+
+.heading_pack {
+	font-size: 14px;
+	text-align: center;
+}
+
+#main_table_pack td.inner_left{
+	text-align: right;
+	font-weight: bold;
+	width: 150px;
+}
+
+
+
+
+
+
