@@ -48,16 +48,12 @@
   } 
 ?>
 
-<html>
-<head>
- <style> @import url('<?=base_url()?>css/main.css'); </style>
-</head>
+<?php $this->load->view('templates/header'); ?>
 <body>
     <!-- notificacion -->
-  <p class='error'><?=$msg?> </p> 
+  <p class='error'><?php echo isset($msg)? $msg : ''  ?> </p>   
 
   <div id="header">
-    <?php $this->load->view('templates/header'); ?>
   </div>
 
   <div id="menu">
@@ -80,10 +76,4 @@
   </div>  
 
 
-<!--  <div id="footer">
-    <?php $this->load->view('templates/footer'); ?>
-  </div>
-
--->
-</body>
-</html>
+<?php $this->load->view('templates/footer'); ?>
