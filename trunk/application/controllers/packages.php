@@ -52,8 +52,15 @@ class Packages extends CI_Controller{
   */
 	function add () {
 
+    # librerias
+    $this->load->helper('form');          
+    $data = $this->users_bss->general();
+
 		# return of the form
     if($this->input->post('new_package')) {
+
+      $this->load->library('form_validation');
+      if ($this->form_validation->run('packages') != FALSE) {    
 
           $insert = array(
             'vc_package_name'=>$this->input->post('vc_package_name'),
@@ -67,19 +74,17 @@ class Packages extends CI_Controller{
 
           $msg = "Se genero un paquete nuevo.";
           $this->index($msg);
-    } else {
-          # librerias
-          $this->load->helper('form');          
-          $data = $this->users_bss->general();
+      }    
+    } 
 
-          # data fileds
-          $data['vc_package_name']  = array('name'=>'vc_package_name', 'size'=>30, 'key'=>'Nombre');    
-          $data['i_months']         = array('name'=>'i_months', 'size'=>5, 'key'=>'Meses');
-          $data['i_price']          = array('name'=>'i_price', 'size'=>5, 'key'=>'Costo');
-          $data['vc_description']   = array('name'=>'vc_description', 'size'=>80, 'key'=>'Descripcion');
+    
+    # data fileds
+    $data['vc_package_name']  = array('name'=>'vc_package_name', 'size'=>30, 'key'=>'Nombre');    
+    $data['i_months']         = array('name'=>'i_months', 'size'=>5, 'key'=>'Meses');
+    $data['i_price']          = array('name'=>'i_price', 'size'=>5, 'key'=>'Costo');
+    $data['vc_description']   = array('name'=>'vc_description', 'size'=>80, 'key'=>'Descripcion');
          
-          $this->load->view('packages/new_package', $data);
-    }  
+    $this->load->view('packages/new_package', $data);  
 	}
 
 

@@ -4,6 +4,9 @@
    <script type="text/javascript" src="<?=base_url()?>js/birthdate.js"></script>
 </head>
 <body>
+    <!-- notificacion -->
+  <?php echo validation_errors('<p class="error">', '</p>'); ?>   
+
   <div id="header">
     <?php $this->load->view('templates/header'); ?>
   </div>
@@ -19,8 +22,8 @@
         <td class="data_rows_single_user">
           <table id="inner_table" border="0" >
             <?=form_open('users/subscribe')?>
-            <tr><td class="inner_left"><?=$vc_username['key'].' : '?></td><td><?=form_input($vc_username['name'])?></td></tr>
-            <tr><td class="inner_left"><?=$vc_lastname['key'].' : '?></td><td><?=form_input($vc_lastname['name'])?></td></tr>
+            <tr><td class="inner_left"><?=$vc_username['key'].' : '?></td><td><?=form_input($vc_username['name'])?>*</td></tr>
+            <tr><td class="inner_left"><?=$vc_lastname['key'].' : '?></td><td><?=form_input($vc_lastname['name'])?>*</td></tr>
             <tr><td class="inner_left"><?=$dt_birthday['key'].' : '?></td><td><SELECT id ="date" name = "dd" ></SELECT>
                                                                       <SELECT id ="month" name = "mm" ></SELECT>
                                                                       <SELECT id ="year" name = "yyyy" ></SELECT></td></tr>
@@ -43,9 +46,37 @@
         <td class="data_rows_single_user">
           <table id="inner_table" >
             <tr>
-              <td class="inner_photo"><div id="header"></div></td>
+              <td class="inner_photo"><div id="">
+
+                <script type="text/javascript" src="<?=base_url()?>/js/webcam.js"></script>
+                <script language="JavaScript">
+                  var base_url = "<?=base_url()?>";
+                          webcam.set_swf_url( base_url + 'js/webcam.swf' );
+                          webcam.set_api_url( base_url + 'js/test.php' );
+                          webcam.set_quality( 90 ); // JPEG quality (1 - 100)
+                          webcam.set_shutter_sound( true ); // play shutter click sound
+                </script>
+                <script language="JavaScript">
+                        document.write( webcam.get_html(320, 200) );
+                </script>
+
+                <br/><form>
+                        <input type=button value="Configure..." onClick="webcam.configure()">
+                        &nbsp;&nbsp;&nbsp;
+                        <input type=button value="Take Snapshot" onClick="webcam.snap()">
+                </form>
+                <script language="JavaScript">
+                        webcam.set_hook( 'onComplete', 'my_callback_function' );
+                        function my_callback_function(response) {
+                                alert("Success! PHP returned: " + response);
+                        }
+                </script>
+
+
+
+              </div></td>
             </tr>
-              <!-- poner la foto aqui -->
+              <!-- poner la foto aqui --> 
           </table>
         </td>
       </tr>
