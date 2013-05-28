@@ -32,7 +32,6 @@
     $f = explode('-', $value['dt_birthday']);
     $ff = $f[2].'-'.$f[1].'-'.$f[0];
 
-
     $this->table->add_row(
       $value['id_user'],
       anchor("users/view/{$value['id_user']}", $value['vc_username']." ".$value['vc_lastname']),
@@ -45,22 +44,14 @@
   } 
 ?>
 
-<html>
-<head>
- <style> @import url('<?=base_url()?>css/main.css'); </style>
-</head>
+<?php $this->load->view('templates/header'); ?>
 <body>
     <!-- notificacion -->
   <p class='error'><?=$msg?> </p> 
 
-  <div id="header">
-    <?php $this->load->view('templates/header'); ?>
-  </div>
+  <div id="header"></div>
 
-  <div id="menu">
-    <?php echo $menu; ?>
-  </div>
-
+  <div id="menu"><?php echo $menu; ?></div>
 
   <div id="content">
     <?php if (isset($message)) {echo $message;} ?>
@@ -77,10 +68,4 @@
   </div>  
 
 
-<!--  <div id="footer">
-    <?php $this->load->view('templates/footer'); ?>
-  </div>
-
--->
-</body>
-</html>
+<?php $this->load->view('templates/footer'); ?>

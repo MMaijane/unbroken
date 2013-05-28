@@ -1,14 +1,10 @@
-<html>
-<head>
-   <style> @import url('<?=base_url()?>css/main.css'); </style>
-   <script type="text/javascript" src="<?=base_url()?>js/birthdate.js"></script>
-</head>
+
+<?php $this->load->view('templates/header'); ?>
 <body>
 
   <?php echo validation_errors('<p class="error">', '</p>'); ?>   
   
   <div id="header">
-    <?php $this->load->view('templates/header'); ?>
   </div>
 
   <div id="menu">
@@ -36,12 +32,6 @@
   </div> 
     
 
-
-
-  <div id="footer">
-    <?php $this->load->view('templates/footer'); ?>
-  </div>
-</body>
-</html>
+<?php $this->load->view('templates/footer'); ?>
 
     

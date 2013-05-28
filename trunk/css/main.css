@@ -89,8 +89,9 @@ asi como poner el agregar cliente en la seccion de arriba derecha
 */
 
 #main_table {
-	width: 80%;
+	width: 90%;
 	font-size: 14px;
+	float: center;
 }
 
 .heading {
@@ -185,6 +186,34 @@ separan la tabla en 3 secciones para poder mostrar la imagen
 
 
 
-
-
+/*-- menu --*/
+#nav{
+    list-style:none;
+    font-weight:bold;
+    margin-bottom:10px;
+    <span class="code-comment">/* Clear floats */</span>
+    float:left;
+    width:100%;
+    <span class="code-comment">/* Bring the nav above everything else--uncomment if needed.
+    position:relative;
+    z-index:5;
+    */</span>
+}
+#nav li{
+    float:left;
+    margin-right:10px;
+    position:relative;
+}
+#nav a{
+    display:block;
+    padding:5px;
+    color:#fff;
+    background:#333;
+    text-decoration:none;
+}
+#nav a:hover{
+    color:#fff;
+    background:green;
+    text-decoration:underline;
+}
 

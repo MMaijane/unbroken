@@ -81,29 +81,13 @@
 
 ?>
 
-
-
-<html>
-<head>
-  <style> @import url('<?=base_url()?>css/main.css'); </style>
-  <script type="text/javascript">
-    function ShowHistory() {
-      var div = document.getElementById('HistoryDiv');
-      if (div.style.display !== 'none') {
-          div.style.display = 'none';
-      } else {
-        div.style.display = 'block';
-      }
-    };
-  </script>
-</head>
+<?php $this->load->view('templates/header'); ?>
 <body>
   <!-- notificacion -->
   <p class='error'><?=$msg?> </p> 
 
 
   <div id="header">
-    <?php $this->load->view('templates/header'); ?>
   </div>
 
 
@@ -113,6 +97,9 @@
 
 
   <div id="content">
+    <table name="tb_new_user" id="tb_new_user"> 
+      <tr><td><?=anchor("users/subscribe", "nvo. cliente")?></td></tr>
+    </table>
   <?php   
   
     # si no exite el usuario
@@ -121,7 +108,7 @@
     } else { ?>
 
       <table id="main_table_single_user"  border="1">
-        <tr><th class="heading">Datos Principales</th><th class="heading">Direccion</th></tr>
+        <tr><th class="heading">Datos Principales</th><th class="heading">Direccion</th><th class="heading">Fotografia</th></tr>
         <tr>
           <td class="data_rows_single_user">
             <table id="inner_table" border="0" >
@@ -187,11 +174,6 @@
     </div>
   </div> 
 
-
-  <div id="footer">
-    <?php $this->load->view('templates/footer'); ?>
-  </div>
-</body>
-</html>
+<?php $this->load->view('templates/footer'); ?>
 
     

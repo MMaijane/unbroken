@@ -31,17 +31,10 @@ $yyyy = $f[0];
 
 ?>
 
-
-
-<html>
-<head>
-  <style> @import url('<?=base_url()?>css/main.css'); </style>
-  <script type="text/javascript" src="<?=base_url()?>js/birthdate.js"></script>
-</head>
+<?php $this->load->view('templates/header'); ?>
 <body>
 
   <div id="header">
-    <?php $this->load->view('templates/header'); ?>
   </div>
 
 
@@ -51,6 +44,9 @@ $yyyy = $f[0];
 
 
   <div id="content">
+    <table name="tb_new_user" id="tb_new_user"> 
+      <tr><td><?=anchor("users/subscribe", "nvo. cliente")?></td></tr>
+    </table>
   <?php   
   
     # si no exite el usuario
@@ -59,7 +55,7 @@ $yyyy = $f[0];
     } else { ?>
 
       <table id="main_table_single_user"  border="1">
-        <tr><th class="heading">Datos Principales</th><th class="heading">Direccion</th></tr>
+        <tr><th class="heading">Datos Principales</th><th class="heading">Direccion</th><th class="heading">Fotografia</th></tr>
         <tr>
           <td class="data_rows_single_user">
             <table id="inner_table" border="0" >
@@ -103,11 +99,5 @@ $yyyy = $f[0];
     } ?> <br>
   </div> 
 
-
-  <div id="footer">
-    <?php $this->load->view('templates/footer'); ?>
-  </div>
-</body>
-</html>
-
+<?php $this->load->view('templates/footer'); ?>
     
