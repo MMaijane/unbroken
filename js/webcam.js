@@ -119,7 +119,6 @@ window.webcam = {
 		// take snapshot and send to server
 		// specify fully-qualified URL to server API script
 		// and callback function (string or function object)
-		alert('2');
 		if (callback) this.set_hook('onComplete', callback);
 		if (url) this.set_api_url(url);
 		if (typeof(stealth) != 'undefined') this.set_stealth( stealth );

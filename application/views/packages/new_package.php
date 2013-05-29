@@ -5,7 +5,10 @@
   <?php echo validation_errors('<p class="error">', '</p>'); ?>   
   
   <div id="header">
+    <div id="img_left"></div>
+    <div id="img_right"></div>
   </div>
+
 
   <div id="menu">
     <?php echo $menu; ?>
