@@ -49,7 +49,10 @@
     <!-- notificacion -->
   <p class='error'><?=$msg?> </p> 
 
-  <div id="header"></div>
+  <div id="header">
+    <div id="img_left"></div>
+    <div id="img_right"></div>
+  </div>
 
   <div id="menu"><?php echo $menu; ?></div>
 
