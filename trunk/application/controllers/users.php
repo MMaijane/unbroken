@@ -87,20 +87,23 @@ class Users extends CI_Controller{
             );
             
             $this->users_bss->insert_user($user_data);
+           
+            # ver el corte (15 - 30)
+            $day = date('d');
+            if ($day <= 15 && $day <= 7) { $b_slot = 1; $d_day = 30;#30
+            } else if ($day <=15 && $day > 7) { $b_slot = 2; $d_day = 15; #15
+            } else if ($day <= 30 && $day <= 23) { $b_slot = 2; $d_day = 15; #15
+            } else { $b_slot = 1; $d_day = 30; #30
+            }
 
             # obtain the expires date with the package id
             $package_months = $this->packages_bss->get_package_months($this->input->post('id_pack'));
             $user_id = $this->users_bss->get_user_id($this->input->post('vc_username'), $this->input->post('dt_birthday'));
             $expires = "+{$package_months['i_months']} month";
-            $expires_date = date('Y-m-d', strtotime("{$expires}", strtotime($date)));
-
-            # ver el corte (15 - 30)
-            $day = date('d');
-            if ($day <= 15 && $day <= 7) { $b_slot = 1; #30
-            } else if ($day <=15 && $day > 7) { $b_slot = 2; #15
-            } else if ($day <= 30 && $day <= 23) { $b_slot = 2; #15
-            } else { $b_slot = 1; #30
-            }
+            
+            $m = date('m');
+            $m = $m + $package_months['i_months'];
+            $expires_date  = date('Y-'.$m.'-'.$d_day);
 
             # tb_subscriptions
             $subscription_data = array(
@@ -117,36 +120,37 @@ class Users extends CI_Controller{
             $msg = "Se genero una subscripcion exitosa.";
             $this->index($msg);
       } 
-    } 
+    } else { 
 
-            
-    #new subscription
-    $data = $this->users_bss->general();
-    $data['packages'] = $this->packages_bss->get_active_packages();
-    $data['packs'] = array();
-    foreach ($data['packages'] as $key => $value) {
-
-      $data['packs'][$value['id_packages']] = $value['vc_package_name']."-".$value['vc_description'];              
-    }
-
-    # data fileds
-    $data['vc_username']    = array('name'=>'vc_username', 'size'=>30, 'key'=>'Nombre');    
-    $data['vc_lastname']    = array('name'=>'vc_lastname', 'size'=>30, 'key'=>'Apellidos');
-    $data['dt_birthday']    = array('name'=>'dt_birthday', 'size'=>30, 'key'=>'Fecha de nac.');
-    $data['vc_worknumber']  = array('name'=>'vc_worknumber', 'size'=>15, 'key'=>'Oficina');
-    $data['vc_phonenumber'] = array('name'=>'vc_phonenumber', 'size'=>15, 'key'=>'Particular');
-    $data['vc_msisdn']      = array('name'=>'vc_msisdn', 'size'=>15, 'key'=>'Celular');
-    $data['vc_street']      = array('name'=>'vc_street', 'size'=>30, 'key'=>'Calle');
-    $data['vc_city']        = array('name'=>'vc_city', 'size'=>30, 'key'=>'Ciudad');
-    $data['vc_state']       = array('name'=>'vc_state', 'size'=>30, 'key'=>'Estado');
-    $data['i_cp']           = array('name'=>'i_cp', 'size'=>7, 'key'=>'CP.');
-    $data['vc_country']     = array('name'=>'vc_country', 'size'=>30, 'key'=>'Pais');
-    $data['vc_email']       = array('name'=>'vc_email', 'size'=>40, 'key'=>'E-mail');
-    $data['vc_facebook']    = array('name'=>'vc_facebook', 'size'=>30, 'key'=>'Facebook');
-    $data['vc_picture']     = array('name'=>'vc_picture', 'size'=>40, 'key'=>'Imagen');
               
+      #new subscription
+      $data = $this->users_bss->general();
+      $data['packages'] = $this->packages_bss->get_active_packages();
+      $data['packs'] = array();
+      foreach ($data['packages'] as $key => $value) {
 
-    $this->load->view('users/new_subscription', $data); 
+        $data['packs'][$value['id_packages']] = $value['vc_package_name']."-".$value['vc_description'];              
+      }
+
+      # data fileds
+      $data['vc_username']    = array('name'=>'vc_username', 'size'=>30, 'key'=>'Nombre');    
+      $data['vc_lastname']    = array('name'=>'vc_lastname', 'size'=>30, 'key'=>'Apellidos');
+      $data['dt_birthday']    = array('name'=>'dt_birthday', 'size'=>30, 'key'=>'Fecha de nac.');
+      $data['vc_worknumber']  = array('name'=>'vc_worknumber', 'size'=>15, 'key'=>'Oficina');
+      $data['vc_phonenumber'] = array('name'=>'vc_phonenumber', 'size'=>15, 'key'=>'Particular');
+      $data['vc_msisdn']      = array('name'=>'vc_msisdn', 'size'=>15, 'key'=>'Celular');
+      $data['vc_street']      = array('name'=>'vc_street', 'size'=>30, 'key'=>'Calle');
+      $data['vc_city']        = array('name'=>'vc_city', 'size'=>30, 'key'=>'Ciudad');
+      $data['vc_state']       = array('name'=>'vc_state', 'size'=>30, 'key'=>'Estado');
+      $data['i_cp']           = array('name'=>'i_cp', 'size'=>7, 'key'=>'CP.');
+      $data['vc_country']     = array('name'=>'vc_country', 'size'=>30, 'key'=>'Pais');
+      $data['vc_email']       = array('name'=>'vc_email', 'size'=>40, 'key'=>'E-mail');
+      $data['vc_facebook']    = array('name'=>'vc_facebook', 'size'=>30, 'key'=>'Facebook');
+      $data['vc_picture']     = array('name'=>'vc_picture', 'size'=>40, 'key'=>'Imagen');
+                
+
+      $this->load->view('users/new_subscription', $data); 
+    }
   }
 
 
@@ -154,32 +158,37 @@ class Users extends CI_Controller{
 
     $this->load->model('packages_bss');
     $user_id = $this->input->post('id_user');
+
     $date = date('Y-m-d');  
 
     # verificar que no halla registro activo
-    $data['active_pk'] = $this->users_bss->view_active_package($user_id);
+    $data['active_pk'] = $this->users_bss->view_active_package($this->input->post('id_user'));
     if (!empty($data['active_pk'])) {
       
           $msg = "Se encuentra una subscription activa.";
-          $this->view($user_id, $msg);
+          $this->view($this->input->post('id_user'), $msg);
     } else { #no hay subscription activa
+           
+            # ver el corte (15 - 30)
+            $day = date('d');
+            if ($day <= 15 && $day <= 7) { $b_slot = 1; $d_day = 30;#30
+            } else if ($day <=15 && $day > 7) { $b_slot = 2; $d_day = 15; #15
+            } else if ($day <= 30 && $day <= 23) { $b_slot = 2; $d_day = 15; #15
+            } else { $b_slot = 1; $d_day = 30; #30
+            }
 
-          # obtain the expires date with the package id
-          $package_months = $this->packages_bss->get_package_months($this->input->post('id_pack'));    
-          $expires = "+{$package_months['i_months']} month";
-          $expires_date = date('Y-m-d', strtotime("{$expires}", strtotime($date)));
-
-          # ver el corte (15 - 30)
-          $day = date('d');
-          if ($day <= 15 && $day <= 7) { $b_slot = 1; #30
-          } else if ($day <=15 && $day > 7) { $b_slot = 2; #15
-          } else if ($day <= 30 && $day <= 23) { $b_slot = 2; #15
-          } else { $b_slot = 1; #30
-          }
+            # obtain the expires date with the package id
+            $package_months = $this->packages_bss->get_package_months($this->input->post('id_pack'));
+            $user_id = $this->users_bss->get_user_id($this->input->post('vc_username'), $this->input->post('dt_birthday'));
+            $expires = "+{$package_months['i_months']} month";
+            
+            $m = date('m');
+            $m = $m + $package_months['i_months'];
+            $expires_date  = date('Y-'.$m.'-'.$d_day);
 
           # tb_subscriptions
           $subscription_data = array(
-            'id_user'=>$user_id,
+            'id_user'=>$this->input->post('id_user'),
             'id_package'=>$this->input->post('id_pack'),
             'dt_subscription'=>$date,
             'dt_expires'=>$expires_date,
@@ -190,7 +199,7 @@ class Users extends CI_Controller{
           $this->users_bss->insert_subscription($subscription_data);
 
           $msg = "Se renovo una subscripcion exitosa.";
-          $this->view($user_id, $msg);
+          $this->view($this->input->post('id_user'), $msg);
     }
   }
 
@@ -231,6 +240,7 @@ class Users extends CI_Controller{
 
     # get historial
     $data['history_pk'] = $this->users_bss->view_user_history_by_id($id_user);
+
     if (empty($data['history_pk'])) {
       $data['error']['history_pk'] = "No hay historial de subscriptiones.";
     }

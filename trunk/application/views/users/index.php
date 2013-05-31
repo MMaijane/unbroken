@@ -29,7 +29,7 @@
   foreach($users as $key => $value) {
 
     #change the date form - from  yyyy-mm-dd to dd-mm-yyyy
-    $f = explode('-', $value['dt_birthday']);
+    $f = explode('-', $value['dt_registry']);
     $ff = $f[2].'-'.$f[1].'-'.$f[0];
 
     $this->table->add_row(
@@ -67,8 +67,7 @@
       //-- Display Table
       $table = $this->table->generate();
       echo $table;
-    ?>
+    ?><br><br><br>
   </div>  
 
 
-<?php $this->load->view('templates/footer'); ?>
