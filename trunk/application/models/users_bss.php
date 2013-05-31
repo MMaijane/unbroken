@@ -61,11 +61,9 @@ class Users_bss extends CI_Model {
 
   function get_deactive_users() {
 
-    $query = $this->db->query("select * from tb_subscriptions subs ".
-                              "join tb_users usr on (usr.id_user = subs.id_user) ".
-                              "join tb_packages pack on (pack.id_packages = subs.id_package) ".
-                              "where subs.b_status=0 ".
-                              "order by dt_subscription desc");
+    $query = $this->db->query("select * from tb_users usr ".
+                              "where usr.id_user NOT IN (select id_user from tb_subscriptions subs where b_status=1 ) ".
+                              "order by usr.id_user asc");
 
     return $query->result_array();
   }
@@ -77,7 +75,7 @@ class Users_bss extends CI_Model {
                               "join tb_users usr on (usr.id_user = subs.id_user) ".
                               "join tb_packages pack on (pack.id_packages = subs.id_package) ".
                               "where subs.b_status=1 ".
-                              "order by dt_subscription desc");
+                              "order by dt_expires desc");
 
     return $query->result_array();
   }
@@ -151,6 +149,15 @@ class Users_bss extends CI_Model {
                               "order by dt_subscription desc");
 
     return $query->result_array();
+  }
+
+
+  function set_past_subscriptions() {
+
+    $date = date("Y-m-d");
+    $query = $this->db->query("update tb_subscriptions subs ".
+                              "set subs.b_status=0 ".
+                              "where subs.b_status=1 and subs.dt_expires <= '{$date}' ");
   }
 
 

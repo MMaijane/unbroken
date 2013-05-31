@@ -68,16 +68,7 @@
 
   # cambio de orden fecha de nacimiento y fecha de registro
   $r = explode('-', $user['dt_registry']); $d_reg = $r[2].'-'.$r[1].'-'.$r[0]; # fecha de registro
-  $b = explode('-', $user['dt_registry']); $d_bir = $b[2].'-'.$b[1].'-'.$b[0]; # fecha de registro
-
-
-
-
-
-  ####falta foto
-
-
-
+  $b = explode('-', $user['dt_birthday']); $d_bir = $b[2].'-'.$b[1].'-'.$b[0]; # fecha de registro
 
 ?>
 
@@ -101,7 +92,7 @@
 
   <div id="content">
     <table name="tb_new_user" id="tb_new_user"> 
-      <tr><td><?=anchor("users/subscribe", "nvo. cliente")?></td></tr>
+      <tr><td><?=anchor("users/subscribe", "Nvo. Socio")?></td></tr>
     </table>
   <?php   
   
@@ -132,19 +123,25 @@
               <tr><td class="inner_left">CP. :</td><td><?=$user['i_cp']?></td></tr>
               <tr><td class="inner_left">Pais :</td><td><?=$user['vc_country']?></td></tr>
               <tr><td class="inner_left">Email :</td><td><?=$user['vc_email']?></td></tr>
-              <tr><td class="inner_left">Facebook :</td><td><?=$user['vc_facebook']?></td></tr>
+              <tr><td class="inner_left">Facebook :</td><td><?=$user['vc_facebook']?></td></tr>          
             </table>
           </td>
           <td class="data_rows_single_user">
             <table id="inner_table" >
               <tr>
-                <td class="inner_photo"><div id="header"></div></td>
+                <td class="inner_photo">
+                  <?php 
+                    if ($user['vc_picture'] != '') {?>
+                      <img src="<?=base_url()?>img/users_pics/<?=$user['vc_picture']?>" class='usr_pic'></img>
+                    <?php } else { ?>
+                      No hay fotografia
+                    <?php } ?>
+                </td>
               </tr>
-              <!-- poner la foto aqui -->
             </table>
           </td>
         </tr>
-      </table>
+      </table><p class="comment">Comentario : <?=$user['vc_coment']?></p>
       <?=anchor("users/edit/{$user['id_user']}", "Editar", 'class = "anchor"')?>
       <br><?php
 

@@ -14,6 +14,10 @@ class Welcome extends CI_Controller {
 
   function index($msg='') {
 
+    #cambiar estatus a subscripciones vencidas
+    $this->users_bss->set_past_subscriptions();
+
+
     # ver el corte (15 - 30)
     $day = date('d');
     if ($day <= 15 && $day <= 7) { $b_slot = 1; $d_day = 30;#30
@@ -23,7 +27,6 @@ class Welcome extends CI_Controller {
     }
 
     $m = date('m');
-    echo $expires_date  = date('Y-'.$m.'-'.$d_day);
 
     # get data
     $data = $this->users_bss->general();
@@ -40,6 +43,7 @@ class Welcome extends CI_Controller {
   }
 
 }
+
 
 /* End of file welcome.php */
 /* Location: ./application/controllers/welcome.php */
