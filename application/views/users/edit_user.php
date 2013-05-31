@@ -102,5 +102,5 @@ $yyyy = $f[0];
     } ?> <br>
   </div> 
 
-<?php $this->load->view('templates/footer'); ?>
+
     

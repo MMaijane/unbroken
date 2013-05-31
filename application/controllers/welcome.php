@@ -2,25 +2,43 @@
 
 class Welcome extends CI_Controller {
 
-	/**
-	 * Index Page for this controller.
-	 *
-	 * Maps to the following URL
-	 * 		http://example.com/index.php/welcome
-	 *	- or -  
-	 * 		http://example.com/index.php/welcome/index
-	 *	- or -
-	 * Since this controller is set as the default controller in 
-	 * config/routes.php, it's displayed at http://example.com/
-	 *
-	 * So any other public methods not prefixed with an underscore will
-	 * map to /index.php/welcome/<method_name>
-	 * @see http://codeigniter.com/user_guide/general/urls.html
-	 */
-	public function index()
-	{
-		$this->load->view('subscriptions/index');
-	}
+  function Welcome() {
+  	parent::__construct();
+    $this->load->model('users_bss');
+    $this->load->helper('url');
+    $this->load->helper('html'); 
+    $this->load->library('table');
+    $this->load->database();
+  } 
+
+
+  function index($msg='') {
+
+    # ver el corte (15 - 30)
+    $day = date('d');
+    if ($day <= 15 && $day <= 7) { $b_slot = 1; $d_day = 30;#30
+    } else if ($day <=15 && $day > 7) { $b_slot = 2; $d_day = 15; #15
+    } else if ($day <= 30 && $day <= 23) { $b_slot = 2; $d_day = 15; #15
+    } else { $b_slot = 1; $d_day = 30; #30
+    }
+
+    $m = date('m');
+    echo $expires_date  = date('Y-'.$m.'-'.$d_day);
+
+    # get data
+    $data = $this->users_bss->general();
+    $data['users'] = $this->users_bss->get_users();
+    $data['active_users'] = $this->users_bss->get_active_users();
+    $data['deactive_users'] = $this->users_bss->get_deactive_users();
+    $data['next_debt_users'] = $this->users_bss->get_debt_users($b_slot, $d_day);
+    $data['message'] = $this->uri->segment(4);
+    $data['msg'] = $msg;
+
+
+    #mandar a vista
+    $this->load->view('subscriptions/index', $data);
+  }
+
 }
 
 /* End of file welcome.php */

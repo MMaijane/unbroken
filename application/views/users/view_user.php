@@ -50,8 +50,8 @@
 
     foreach ($history_pk as $key => $val) {
       #change the date form - from  yyyy-mm-dd to dd-mm-yyyy
-      $a = explode('-', $active_pk['dt_subscription']); $act2 = $a[2].'-'.$a[1].'-'.$a[0]; # subscripcion
-      $e = explode('-', $active_pk['dt_expires']);      $exp2 = $e[2].'-'.$e[1].'-'.$e[0]; # expiracion
+      $a = explode('-', $val['dt_subscription']); $act2 = $a[2].'-'.$a[1].'-'.$a[0]; # subscripcion
+      $e = explode('-', $val['dt_expires']);      $exp2 = $e[2].'-'.$e[1].'-'.$e[0]; # expiracion
 
       $this->table->add_row(
           $val['vc_package_name'],
@@ -177,6 +177,6 @@
     </div>
   </div> 
 
-<?php $this->load->view('templates/footer'); ?>
+
 
     
