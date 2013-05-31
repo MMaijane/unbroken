@@ -69,21 +69,22 @@ class Users extends CI_Controller{
 
             # tb_users
             $user_data = array(
-              'vc_username'=>$this->input->post('vc_username'),
-              'vc_lastname'=>$this->input->post('vc_lastname'),
+              'vc_username'=>htmlentities(strtoupper($this->input->post('vc_username'))),
+              'vc_lastname'=>strtoupper($this->input->post('vc_lastname')),
               'dt_birthday'=>$dt_birthday,        
               'vc_worknumber'=>$this->input->post('vc_worknumber'),
               'vc_phonenumber'=>$this->input->post('vc_phonenumber'),
               'vc_msisdn'=>$this->input->post('vc_msisdn'),
-              'vc_street'=>$this->input->post('vc_street'),
-              'vc_city'=>$this->input->post('vc_city'),
-              'vc_state'=>$this->input->post('vc_state'),
+              'vc_street'=>strtoupper($this->input->post('vc_street')),
+              'vc_city'=>strtoupper($this->input->post('vc_city')),
+              'vc_state'=>strtoupper($this->input->post('vc_state')),
               'i_cp'=>$this->input->post('i_cp'),
-              'vc_country'=>$this->input->post('vc_country'),
+              'vc_country'=>strtoupper($this->input->post('vc_country')),
               'vc_email'=>$this->input->post('vc_email'),
               'vc_facebook'=>$this->input->post('vc_facebook'),
               'dt_registry'=>$date,
               'vc_picture'=>$this->input->post('vc_picture'),
+              'vc_coment'=>$this->input->post('vc_coment')
             );
             
             $this->users_bss->insert_user($user_data);
@@ -147,6 +148,8 @@ class Users extends CI_Controller{
       $data['vc_email']       = array('name'=>'vc_email', 'size'=>40, 'key'=>'E-mail');
       $data['vc_facebook']    = array('name'=>'vc_facebook', 'size'=>30, 'key'=>'Facebook');
       $data['vc_picture']     = array('name'=>'vc_picture', 'size'=>40, 'key'=>'Imagen');
+      $data['vc_coment']      = array('name'=>'vc_coment', 'cols'=>40, 'rows'=>90, 'key'=>'Comentario');
+
                 
 
       $this->load->view('users/new_subscription', $data); 
@@ -240,7 +243,6 @@ class Users extends CI_Controller{
 
     # get historial
     $data['history_pk'] = $this->users_bss->view_user_history_by_id($id_user);
-
     if (empty($data['history_pk'])) {
       $data['error']['history_pk'] = "No hay historial de subscriptiones.";
     }
@@ -267,21 +269,25 @@ class Users extends CI_Controller{
     # si viene de una actualizacion 
     if($this->input->post('edit_user')) {
 
+          $dt_birthday = $this->input->post('yyyy').'-'.$this->input->post('mm').'-'.$this->input->post('dd');
+
           # tb_users
           $user_data = array(
-            'vc_username'=>$this->input->post('vc_username'),
-            'vc_lastname'=>$this->input->post('vc_lastname'),
+            'vc_username'=>strtoupper($this->input->post('vc_username')),
+            'vc_lastname'=>strtoupper($this->input->post('vc_lastname')),
+            'dt_birthday'=>$dt_birthday,
             'vc_worknumber'=>$this->input->post('vc_worknumber'),
             'vc_phonenumber'=>$this->input->post('vc_phonenumber'),
             'vc_msisdn'=>$this->input->post('vc_msisdn'),
-            'vc_street'=>$this->input->post('vc_street'),
-            'vc_city'=>$this->input->post('vc_city'),
-            'vc_state'=>$this->input->post('vc_state'),
+            'vc_street'=>strtoupper($this->input->post('vc_street')),
+            'vc_city'=>strtoupper($this->input->post('vc_city')),
+            'vc_state'=>strtoupper($this->input->post('vc_state')),
             'i_cp'=>$this->input->post('i_cp'),
-            'vc_country'=>$this->input->post('vc_country'),
+            'vc_country'=>strtoupper($this->input->post('vc_country')),
             'vc_email'=>$this->input->post('vc_email'),
             'vc_facebook'=>$this->input->post('vc_facebook'),
             'vc_picture'=>$this->input->post('vc_picture'),
+            'vc_coment'=>$this->input->post('vc_coment')
           );
 
           $this->users_bss->update_user($id_user, $user_data);
@@ -291,6 +297,7 @@ class Users extends CI_Controller{
 
     } else {
           # data fileds
+          $data['id_user'] = $id_user;
           $data['vc_username']    = array('name'=>'vc_username', 'size'=>30, 'key'=>'Nombre', 'value'=>$data['user']['vc_username']);    
           $data['vc_lastname']    = array('name'=>'vc_lastname', 'size'=>30, 'key'=>'Apellidos', 'value'=>$data['user']['vc_lastname']);
           $data['dt_birthday']    = array('name'=>'dt_birthday', 'size'=>30, 'key'=>'Fecha de nac.', 'value'=>$data['user']['dt_birthday']);
@@ -305,6 +312,8 @@ class Users extends CI_Controller{
           $data['vc_email']       = array('name'=>'vc_email', 'size'=>40, 'key'=>'E-mail', 'value'=>$data['user']['vc_email']);
           $data['vc_facebook']    = array('name'=>'vc_facebook', 'size'=>30, 'key'=>'Facebook', 'value'=>$data['user']['vc_facebook']);
           $data['vc_picture']     = array('name'=>'vc_picture', 'size'=>40, 'key'=>'Imagen', 'value'=>$data['user']['vc_picture']);
+          $data['vc_coment']      = array('name'=>'vc_coment', 'cols'=>40, 'rows'=>60, 'key'=>'Comentario', 'value'=>$data['user']['vc_coment']);
+
 
           # go to view
           $this->load->view('users/edit_user', $data);
@@ -319,7 +328,4 @@ class Users extends CI_Controller{
     $data['users'] = $this->subscribe_bss->get_users();
     $this->load->view('welcome_message', $data);
   }
-
-
-
 }

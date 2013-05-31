@@ -60,7 +60,7 @@
     <?php if (isset($message)) {echo $message;} ?>
       
     <table name="tb_new_user" id="tb_new_user"> 
-      <tr><td><?=anchor("users/subscribe", "nvo. cliente")?></td></tr>
+      <tr><td><?=anchor("users/subscribe", "Nvo. Socio")?></td></tr>
     </table>
       
     <?php

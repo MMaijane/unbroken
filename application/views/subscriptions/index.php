@@ -51,13 +51,13 @@
     # table of users
     $this->table->set_template($tmpl);    
     $this->table->set_caption("<b>Socios Activos</b>");
-    $this->table->set_heading('# Socio', 'Nombre', 'Tel. casa', 'Celular', 'Email', 'Registrado desde');
+    $this->table->set_heading('# Socio', 'Nombre', 'Tel. casa', 'Celular', 'Email', 'Fecha Expiracion');
 
     //-- Content Rows
     foreach($active_users as $key => $value) {
 
       #change the date form - from  yyyy-mm-dd to dd-mm-yyyy
-      $f = explode('-', $value['dt_birthday']);
+      $f = explode('-', $value['dt_expires']);
       $ff = $f[2].'-'.$f[1].'-'.$f[0];
 
       $this->table->add_row(
@@ -78,22 +78,17 @@
     # table of users
     $this->table->set_template($tmpl);    
     $this->table->set_caption("<b>Socios Desactivos</b>");
-    $this->table->set_heading('# Socio', 'Nombre', 'Tel. casa', 'Celular', 'Email', 'Registrado desde');
+    $this->table->set_heading('# Socio', 'Nombre', 'Tel. casa', 'Celular', 'Email');
 
     //-- Content Rows
     foreach($deactive_users as $key => $value) {
-
-      #change the date form - from  yyyy-mm-dd to dd-mm-yyyy
-      $f = explode('-', $value['dt_birthday']);
-      $ff = $f[2].'-'.$f[1].'-'.$f[0];
 
       $this->table->add_row(
         $value['id_user'],
         anchor("users/view/{$value['id_user']}", $value['vc_username']." ".$value['vc_lastname']),
         $value['vc_phonenumber'],
         $value['vc_msisdn'],
-        $value['vc_email'],
-        $ff
+        $value['vc_email']
       );
     } 
 
@@ -149,6 +144,7 @@
 
   <div id="content">
     <?php if (isset($message)) {echo $message;} ?>
+    
      
     <div id="div_left">
       Info. General<br><br>

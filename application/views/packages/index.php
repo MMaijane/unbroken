@@ -68,7 +68,8 @@
     <?php if (isset($message)) {echo $message.br();} ?>
       
     <table name="tb_new_user" id="tb_new_user"> 
-      <tr><td><?=anchor("packages/add", "nvo. paquete")?></td></tr>
+      <tr><td><?=anchor("packages/add", "Nva. Promocion")?></td></tr>
+
     </table>
       
     <?php

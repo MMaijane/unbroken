@@ -1,4 +1,10 @@
 
+<?php
+  for ($i=1; $i <=31; $i++) {$day[$i] = $i; }
+  for ($i=1; $i <=12; $i++) {$month[$i] = $i; }
+  for ($i=date('Y'); $i>='1950'; $i--) {$year[$i] = $i; }
+ ?>
+
 <?php $this->load->view('templates/header'); ?>
 	<body>
   	<!-- error -->
@@ -24,9 +30,10 @@
 		          <?=form_open('users/subscribe')?>
 		          <tr><td class="inner_left"><?=$vc_username['key'].' : '?></td><td><?=form_input($vc_username['name'])?>*</td></tr>
 		          <tr><td class="inner_left"><?=$vc_lastname['key'].' : '?></td><td><?=form_input($vc_lastname['name'])?>*</td></tr>
-		          <tr><td class="inner_left"><?=$dt_birthday['key'].' : '?></td><td><SELECT id ="date" name = "dd" ></SELECT>
-		                                                                      <SELECT id ="month" name = "mm" ></SELECT>
-		                                                                      <SELECT id ="year" name = "yyyy" ></SELECT></td></tr>
+		          <tr><td class="inner_left"><?=$dt_birthday['key'].' : '?></td><td>                                      
+		          												<?=form_dropdown('dd', $day)?>
+                                      <?=form_dropdown('mm', $month)?>
+                                      <?=form_dropdown('yyyy', $year)?></td></tr>
 		          <tr><td class="inner_left">Tel. <?=$vc_worknumber['key'].' : '?></td><td><?=form_input($vc_worknumber['name'])?></td></tr>
 		          <tr><td class="inner_left">Tel. <?=$vc_phonenumber['key'].' : '?></td><td><?=form_input($vc_phonenumber['name'])?></td></tr>
 		          <tr><td class="inner_left"><?=$vc_msisdn['key'].' : '?></td><td><?=form_input($vc_msisdn['name'])?></td></tr>
@@ -70,13 +77,9 @@
 		                                alert("Success! PHP returned: " + response);
 		                        }
 		                </script>
-
-
-
 		              </div>
 		            </td>
 		          </tr>
-		              <!-- poner la foto aqui --> 
 		        </table>
 		      </td>
 		    </tr>
@@ -85,13 +88,16 @@
 		  <script type="text/javascript">date_populate("date", "month", "year");</script>
 
 		  <table id="tb_package_new_user"  border="1">
-		    <tr><th class="heading">Paquete</th></tr>
+		    <tr><th class="heading">Paquete</th><th class="heading">Comentario</th></tr>
 		    <tr>
 		      <td>
 		        <table id="inner_table" border='0'>
-		          <tr><td class="inner_left">Paquete : </td><td><?=form_dropdown('id_pack', $packs, 'large')?></td></tr>
+		          <tr><td class="inner_left">Paquete: </td><td><?=form_dropdown('id_pack', $packs, 'large')?></td></tr>
 		        </table>
 		      </td>
+		    	<td>
+		    		<?=form_textarea($vc_facebook['name'])?>
+		    	</td>
 		    </tr>
 		  </table><br>
 		    
