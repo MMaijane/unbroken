@@ -33,6 +33,11 @@ $config = array(
                                             'label' => 'Price',
                                             'rules' => 'required'
                                          )
-                                    )                          
+                                    ),
+                  'renew' => array(
+                                            'field' => 'folio',
+                                            'label' => 'folio',
+                                            'rules' => 'required'
+                                  )                                                         
                );
 ?>

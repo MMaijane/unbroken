@@ -154,7 +154,9 @@
         $attributes = array('class' => 'offer_package' );
         $hidden = array('id_user' => $id_user);
         echo form_open('users/renewal_subscription', $attributes, $hidden); 
-        echo "Renovar? : ".form_dropdown('id_pack', $packs); 
+        echo "Renovar? <br>";
+        echo "Promocion : ".form_dropdown('id_pack', $packs)."<br>"; 
+        echo "No. folio : ".form_input('folio','', 'size=5')."<br>";
         echo form_submit('renewal_subscription','Renovar!');  
         echo form_close();  
       } else {
