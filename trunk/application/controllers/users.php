@@ -24,6 +24,7 @@ class Users extends CI_Controller{
     $this->load->helper('url');
     $this->load->helper('html'); 
     $this->load->library('table');
+    $this->load->library('form_validation'); 
     $this->load->database();
   } 
 
@@ -61,8 +62,9 @@ class Users extends CI_Controller{
     # return for the form
     if($this->input->post('new_subscription')) {
       
-      $this->load->library('form_validation');
-      if ($this->form_validation->run('subscribe') != FALSE) {    
+                 
+      if ($this->form_validation->run('subscribe') != FALSE) { 
+       
             # correcto
             $date = date("Y-m-d");
             $dt_birthday = $this->input->post('yyyy').'-'.$this->input->post('mm').'-'.$this->input->post('dd');
@@ -89,38 +91,41 @@ class Users extends CI_Controller{
             
             $this->users_bss->insert_user($user_data);
            
-            # ver el corte (15 - 30)
-            $day = date('d');
-            if ($day <= 15 && $day <= 7) { $b_slot = 1; $d_day = 30;#30
-            } else if ($day <=15 && $day > 7) { $b_slot = 2; $d_day = 15; #15
-            } else if ($day <= 30 && $day <= 23) { $b_slot = 2; $d_day = 15; #15
-            } else { $b_slot = 1; $d_day = 30; #30
-            }
-
             # obtain the expires date with the package id
             $package_months = $this->packages_bss->get_package_months($this->input->post('id_pack'));
             $user_id = $this->users_bss->get_user_id($this->input->post('vc_username'), $this->input->post('dt_birthday'));
-            $expires = "+{$package_months['i_months']} month";
-            
-            $m = date('m');
-            $m = $m + $package_months['i_months'];
-            $expires_date  = date('Y-'.$m.'-'.$d_day);
 
+
+            # ver el corte (15 - 30)
+            $day = date('d');
+            if ($day <= 15 && $day <= 7) { $b_slot = 1; $d_day = 30; $expires = $package_months['i_months']-1; #30
+            } else if ($day <=15 && $day > 7) { $b_slot = 2; $d_day = 15; $expires = $package_months['i_months']; #15
+            } else if ($day <= 30 && $day <= 23) { $b_slot = 2; $d_day = 15;  $expires = $package_months['i_months']; #15
+            } else { $b_slot = 1; $d_day = 30; $expires = $package_months['i_months']; #30
+            }
+
+            $m = date('m');
+            $m = $m + $expires;
+            $expires_date  = date('Y-'.$m.'-'.$d_day);
             # tb_subscriptions
             $subscription_data = array(
-              'id_user'=>$user_id['id_user'],
-              'id_package'=>$this->input->post('id_pack'),
-              'dt_subscription'=>$date,
-              'dt_expires'=>$expires_date,
-              'b_slot'=>$b_slot,
-              'b_status'=>'1',
+                  'id_user'=>$this->input->post('id_user'),
+                  'id_package'=>$this->input->post('id_pack'),
+                  'dt_subscription'=>$date,
+                  'dt_expires'=>$expires_date,
+                  'b_slot'=>$b_slot,
+                  'vc_folio' => $this->input->post('vc_folio'),
+                  'b_status'=>'1',
             );
-          
+
             $this->users_bss->insert_subscription($subscription_data);
 
             $msg = "Se genero una subscripcion exitosa.";
             $this->index($msg);
-      } 
+      } else {
+            $msg = "Nombre, Apellido o Folio no fueron completados.";
+            $this->index($msg);
+      }
     } else { 
 
               
@@ -198,7 +203,7 @@ class Users extends CI_Controller{
                   'dt_subscription'=>$date,
                   'dt_expires'=>$expires_date,
                   'b_slot'=>$b_slot,
-                  'vc_folio' => $this->input->post('folio'),
+                  'vc_folio' => $this->input->post('vc_folio'),
                   'b_status'=>'1',
                 );
                 

@@ -29,12 +29,13 @@
     # table of active package
     $this->table->set_template($tmpl);    
     $this->table->set_caption("Subscripcion Activa");
-    $this->table->set_heading('Subscripcion', 'Descripcion', 'F. Subscripcion', 'F. Expiracion');
+    $this->table->set_heading('Subscripcion', 'Descripcion', 'F. Subscripcion', 'F. Expiracion', 'Folio');
     $this->table->add_row(
         $active_pk['vc_package_name'],
         $active_pk['vc_description'],
         $act2,
-        $exp2
+        $exp2,
+        $active_pk['vc_folio']
       );
     $active_package = $this->table->generate();
     $this->table->clear(); 
@@ -69,6 +70,10 @@
   # cambio de orden fecha de nacimiento y fecha de registro
   $r = explode('-', $user['dt_registry']); $d_reg = $r[2].'-'.$r[1].'-'.$r[0]; # fecha de registro
   $b = explode('-', $user['dt_birthday']); $d_bir = $b[2].'-'.$b[1].'-'.$b[0]; # fecha de registro
+  $dt = array ('name' => 'vc_folio',
+               'id' => 'vc_folio',
+               'size' => '5');
+
 
 ?>
 
@@ -154,9 +159,12 @@
         $attributes = array('class' => 'offer_package' );
         $hidden = array('id_user' => $id_user);
         echo form_open('users/renewal_subscription', $attributes, $hidden); 
-        echo "Renovar? <br>";
-        echo "Promocion : ".form_dropdown('id_pack', $packs)."<br>"; 
-        echo "No. folio : ".form_input('folio','', 'size=5')."<br>";
+        echo "Renovar? <br>"; ?>
+        <table border="0" align='center' >
+          <tr><td>Promocion : </td><td><?=form_dropdown('id_pack', $packs)?></td></tr>
+          <tr><td>No. folio : </td><td><?=form_input($dt)?></td></tr>
+        </table><?php 
+
         echo form_submit('renewal_subscription','Renovar!');  
         echo form_close();  
       } else {
