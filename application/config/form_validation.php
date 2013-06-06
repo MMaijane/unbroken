@@ -35,9 +35,11 @@ $config = array(
                                          )
                                     ),
                   'renew' => array(
-                                            'field' => 'folio',
-                                            'label' => 'folio',
+                                    array(
+                                            'field' => 'vc_folio',
+                                            'label' => 'vc_folio',
                                             'rules' => 'required'
+                                        )
                                   )                                                         
                );
 ?>

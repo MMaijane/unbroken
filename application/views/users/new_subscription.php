@@ -3,6 +3,10 @@
   for ($i=1; $i <=31; $i++) {$day[$i] = $i; }
   for ($i=1; $i <=12; $i++) {$month[$i] = $i; }
   for ($i=date('Y'); $i>='1950'; $i--) {$year[$i] = $i; }
+
+  $dt = array ('name' => 'vc_folio',
+               'id' => 'vc_folio',
+               'size' => '5');
  ?>
 
 <?php $this->load->view('templates/header'); ?>
@@ -93,6 +97,7 @@
 		      <td>
 		        <table id="inner_table" border='0'>
 		          <tr><td class="inner_left">Paquete: </td><td><?=form_dropdown('id_pack', $packs, 'large')?></td></tr>
+		          <tr><td class="inner_left"># folio : </td><td><?=form_input($dt)?> *</td></tr>
 		        </table>
 		      </td>
 		    	<td>
