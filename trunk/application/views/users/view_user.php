@@ -47,7 +47,7 @@
     # table of active package
     $this->table->set_template($tmpl);    
     $this->table->set_caption("Historial de Subscripciones");
-    $this->table->set_heading('Subscripcion', 'Descripcion', 'F. Subscripcion', 'F. Expiracion');
+    $this->table->set_heading('Subscripcion', 'Descripcion', 'F. Subscripcion', 'F. Expiracion', 'Folio');
 
     foreach ($history_pk as $key => $val) {
       #change the date form - from  yyyy-mm-dd to dd-mm-yyyy
@@ -58,7 +58,8 @@
           $val['vc_package_name'],
           $val['vc_description'],
           $act2,
-          $exp2   
+          $exp2,
+          $val['vc_folio']  
         );
     }
 
