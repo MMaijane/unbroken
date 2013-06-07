@@ -124,9 +124,8 @@ class Users extends CI_Controller{
             $this->index($msg);
       } else {
             $msg = "Nombre, Apellido o Folio no fueron completados.";
-            $this->index($msg);
       }
-    } else { 
+    }
 
               
       #new subscription
@@ -158,7 +157,7 @@ class Users extends CI_Controller{
                 
 
       $this->load->view('users/new_subscription', $data); 
-    }
+    
   }
 
 

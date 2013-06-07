@@ -3,41 +3,46 @@ $config = array(
                  'subscribe' => array(
                                     array(
                                             'field' => 'vc_username',
-                                            'label' => 'Username',
+                                            'label' => 'Nombre',
                                             'rules' => 'required'
                                          ),
                                     array(
                                             'field' => 'vc_lastname',
-                                            'label' => 'Lastname',
+                                            'label' => 'Apellido',
+                                            'rules' => 'required'
+                                         ),
+                                    array(
+                                            'field' => 'vc_folio',
+                                            'label' => 'Folio',
                                             'rules' => 'required'
                                          )
                                     ),
                  'packages' => array(
                                     array(
                                             'field' => 'vc_package_name',
-                                            'label' => 'Name',
+                                            'label' => 'Nombre',
                                             'rules' => 'required'
                                          ),
                                     array(
                                             'field' => 'vc_description',
-                                            'label' => 'Description',
+                                            'label' => 'Descripcion',
                                             'rules' => 'required'
                                          ),
                                     array(
                                             'field' => 'i_months',
-                                            'label' => 'Months',
+                                            'label' => 'Meses',
                                             'rules' => 'required'
                                          ),
                                     array(
                                             'field' => 'i_price',
-                                            'label' => 'Price',
+                                            'label' => 'Precio',
                                             'rules' => 'required'
                                          )
                                     ),
                   'renew' => array(
                                     array(
                                             'field' => 'vc_folio',
-                                            'label' => 'vc_folio',
+                                            'label' => 'Folio',
                                             'rules' => 'required'
                                         )
                                   )                                                         
