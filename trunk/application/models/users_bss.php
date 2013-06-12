@@ -161,6 +161,14 @@ class Users_bss extends CI_Model {
   }
 
 
+  function update_pic_name($user_id, $pic_name){
+   $query = $this->db->query("update tb_users usr ".
+                              "set usr.vc_picture='{$pic_name}' ".
+                              "where usr.id_user={$user_id} "); 
+  }
+
+
+
   //done
   function general () {
 

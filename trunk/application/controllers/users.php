@@ -61,8 +61,7 @@ class Users extends CI_Controller{
 
     # return for the form
     if($this->input->post('new_subscription')) {
-      
-                 
+                       
       if ($this->form_validation->run('subscribe') != FALSE) { 
        
             # correcto
@@ -85,7 +84,7 @@ class Users extends CI_Controller{
               'vc_email'=>$this->input->post('vc_email'),
               'vc_facebook'=>$this->input->post('vc_facebook'),
               'dt_registry'=>$date,
-              'vc_picture'=>$this->input->post('vc_picture'),
+              'vc_picture'=>1,
               'vc_coment'=>$this->input->post('vc_coment')
             );
             
@@ -94,6 +93,11 @@ class Users extends CI_Controller{
             # obtain the expires date with the package id
             $package_months = $this->packages_bss->get_package_months($this->input->post('id_pack'));
             $user_id = $this->users_bss->get_user_id($this->input->post('vc_username'), $this->input->post('dt_birthday'));
+
+            # rename the pic
+            $pic_name = $user_id['id_user'].".jpg"; 
+            rename(getcwd()."\img\users_pics\\new_user_".date('Ymd').".jpg", getcwd()."\img\users_pics\\".$pic_name);
+            $this->users_bss->update_pic_name($user_id['id_user'], $pic_name);
 
 
             # ver el corte (15 - 30)
@@ -109,7 +113,7 @@ class Users extends CI_Controller{
             $expires_date  = date('Y-'.$m.'-'.$d_day);
             # tb_subscriptions
             $subscription_data = array(
-                  'id_user'=>$this->input->post('id_user'),
+                  'id_user'=>$user_id['id_user'],
                   'id_package'=>$this->input->post('id_pack'),
                   'dt_subscription'=>$date,
                   'dt_expires'=>$expires_date,

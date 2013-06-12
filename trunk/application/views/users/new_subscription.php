@@ -1,4 +1,3 @@
-
 <?php
   for ($i=1; $i <=31; $i++) {$day[$i] = $i; }
   for ($i=1; $i <=12; $i++) {$month[$i] = $i; }
@@ -57,29 +56,30 @@
 		      <td class="data_rows_single_user">
 		        <table id="inner_table" >
 		          <tr>
-		            <td class="inner_photo">
-		              <div id="">
-
-		                <script type="text/javascript" src="<?=base_url()?>/js/webcam.js"></script>
+		            <td class="inner_photo"><div id ='22'></div>
+		              <div id="ww">
+		                <script type="text/javascript" src="<?=base_url()?>js/webcam.js"></script>
 		                <script language="JavaScript">
-		                  var base_url = "<?=base_url()?>";
+		                  				var base_url = "<?=base_url()?>";
 		                          webcam.set_swf_url( base_url + 'js/webcam.swf' );
 		                          webcam.set_api_url( base_url + 'js/test.php' );
 		                          webcam.set_quality( 90 ); // JPEG quality (1 - 100)
-		                          webcam.set_shutter_sound( true ); // play shutter click sound
+		                          webcam.set_shutter_sound( false ); // play shutter click sound
 		                </script>
 		                <script language="JavaScript">
 		                        document.write( webcam.get_html(320, 200) );
 		                </script><br/>
-		                        <input type=button value="Configure..." onClick="webcam.configure()">
+		                        <input type=button value="Configurar" onClick="webcam.configure()">
 		                        &nbsp;&nbsp;&nbsp;
-		                        <input type=button value="Take Snapshot" onClick="webcam.snap()">
-
+		                        <input type=button value="Tomar Foto" onClick="webcam.snap()">
+														&nbsp;&nbsp;&nbsp;
+		                        <input type=button value="Reset" onClick="webcam.reset()">
 		                <script language="JavaScript">
 		                        webcam.set_hook( 'onComplete', 'my_callback_function' );
-		                        function my_callback_function(response) {
-		                                alert("Success! PHP returned: " + response);
-		                        }
+										        function my_callback_function(response) {
+										                alert("Success! PHP returned: " + response);
+										        }
+
 		                </script>
 		              </div>
 		            </td>
