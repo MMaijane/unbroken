@@ -59,10 +59,9 @@ class Users extends CI_Controller{
     $this->load->helper('form');  
     $this->load->model('packages_bss');
 
-    # return for the form
-    if($this->input->post('new_subscription')) {
+
                        
-      if ($this->form_validation->run('subscribe') != FALSE) { 
+    if ($this->form_validation->run('subscribe') != FALSE && file_exists(getcwd()."\img\users_pics\\new_user_".date('Ymd').".jpg")) { 
        
             # correcto
             $date = date("Y-m-d");
@@ -126,42 +125,39 @@ class Users extends CI_Controller{
 
             $msg = "Se genero una subscripcion exitosa.";
             $this->index($msg);
-      } else {
-            $msg = "Nombre, Apellido o Folio no fueron completados.";
-      }
+    } else {
+            
+            $data['msg'] = "Tomaste la foto?";                    
+            #new subscription
+            $data = $this->users_bss->general();
+            $data['packages'] = $this->packages_bss->get_active_packages();
+            $data['packs'] = array();
+            foreach ($data['packages'] as $key => $value) {
+
+              $data['packs'][$value['id_packages']] = $value['vc_package_name']."-".$value['vc_description'];              
+            }
+
+            # data fileds
+            $data['vc_username']    = array('name'=>'vc_username', 'size'=>30, 'key'=>'Nombre');    
+            $data['vc_lastname']    = array('name'=>'vc_lastname', 'size'=>30, 'key'=>'Apellidos');
+            $data['dt_birthday']    = array('name'=>'dt_birthday', 'size'=>30, 'key'=>'Fecha de nac.');
+            $data['vc_worknumber']  = array('name'=>'vc_worknumber', 'size'=>15, 'key'=>'Oficina');
+            $data['vc_phonenumber'] = array('name'=>'vc_phonenumber', 'size'=>15, 'key'=>'Particular');
+            $data['vc_msisdn']      = array('name'=>'vc_msisdn', 'size'=>15, 'key'=>'Celular');
+            $data['vc_street']      = array('name'=>'vc_street', 'size'=>30, 'key'=>'Calle');
+            $data['vc_city']        = array('name'=>'vc_city', 'size'=>30, 'key'=>'Ciudad');
+            $data['vc_state']       = array('name'=>'vc_state', 'size'=>30, 'key'=>'Estado');
+            $data['i_cp']           = array('name'=>'i_cp', 'size'=>7, 'key'=>'CP.');
+            $data['vc_country']     = array('name'=>'vc_country', 'size'=>30, 'key'=>'Pais');
+            $data['vc_email']       = array('name'=>'vc_email', 'size'=>40, 'key'=>'E-mail');
+            $data['vc_facebook']    = array('name'=>'vc_facebook', 'size'=>30, 'key'=>'Facebook');
+            $data['vc_picture']     = array('name'=>'vc_picture', 'size'=>40, 'key'=>'Imagen');
+            $data['vc_coment']      = array('name'=>'vc_coment', 'cols'=>40, 'rows'=>90, 'key'=>'Comentario');
+
+                      
+
+            $this->load->view('users/new_subscription', $data); 
     }
-
-              
-      #new subscription
-      $data = $this->users_bss->general();
-      $data['packages'] = $this->packages_bss->get_active_packages();
-      $data['packs'] = array();
-      foreach ($data['packages'] as $key => $value) {
-
-        $data['packs'][$value['id_packages']] = $value['vc_package_name']."-".$value['vc_description'];              
-      }
-
-      # data fileds
-      $data['vc_username']    = array('name'=>'vc_username', 'size'=>30, 'key'=>'Nombre');    
-      $data['vc_lastname']    = array('name'=>'vc_lastname', 'size'=>30, 'key'=>'Apellidos');
-      $data['dt_birthday']    = array('name'=>'dt_birthday', 'size'=>30, 'key'=>'Fecha de nac.');
-      $data['vc_worknumber']  = array('name'=>'vc_worknumber', 'size'=>15, 'key'=>'Oficina');
-      $data['vc_phonenumber'] = array('name'=>'vc_phonenumber', 'size'=>15, 'key'=>'Particular');
-      $data['vc_msisdn']      = array('name'=>'vc_msisdn', 'size'=>15, 'key'=>'Celular');
-      $data['vc_street']      = array('name'=>'vc_street', 'size'=>30, 'key'=>'Calle');
-      $data['vc_city']        = array('name'=>'vc_city', 'size'=>30, 'key'=>'Ciudad');
-      $data['vc_state']       = array('name'=>'vc_state', 'size'=>30, 'key'=>'Estado');
-      $data['i_cp']           = array('name'=>'i_cp', 'size'=>7, 'key'=>'CP.');
-      $data['vc_country']     = array('name'=>'vc_country', 'size'=>30, 'key'=>'Pais');
-      $data['vc_email']       = array('name'=>'vc_email', 'size'=>40, 'key'=>'E-mail');
-      $data['vc_facebook']    = array('name'=>'vc_facebook', 'size'=>30, 'key'=>'Facebook');
-      $data['vc_picture']     = array('name'=>'vc_picture', 'size'=>40, 'key'=>'Imagen');
-      $data['vc_coment']      = array('name'=>'vc_coment', 'cols'=>40, 'rows'=>90, 'key'=>'Comentario');
-
-                
-
-      $this->load->view('users/new_subscription', $data); 
-    
   }
 
 
@@ -287,6 +283,20 @@ class Users extends CI_Controller{
 
           $dt_birthday = $this->input->post('yyyy').'-'.$this->input->post('mm').'-'.$this->input->post('dd');
 
+
+            # rename the pic
+            $pic_name = $id_user.".jpg"; 
+            $pic_url_name =  getcwd()."\img\users_pics\\".$pic_name.".jpg";
+
+            if (file_exists($pic_url_name)){
+              unlink($pic_url_name)  ;
+              rename(getcwd()."\img\users_pics\\new_user_".date('Ymd').".jpg", getcwd()."\img\users_pics\\".$pic_name);
+            } else {
+              rename(getcwd()."\img\users_pics\\new_user_".date('Ymd').".jpg", getcwd()."\img\users_pics\\".$pic_name);
+              $this->users_bss->update_pic_name($id_user, $pic_name);
+            }
+
+            
           # tb_users
           $user_data = array(
             'vc_username'=>strtoupper($this->input->post('vc_username')),
@@ -302,9 +312,10 @@ class Users extends CI_Controller{
             'vc_country'=>strtoupper($this->input->post('vc_country')),
             'vc_email'=>$this->input->post('vc_email'),
             'vc_facebook'=>$this->input->post('vc_facebook'),
-            'vc_picture'=>$this->input->post('vc_picture'),
             'vc_coment'=>$this->input->post('vc_coment')
           );
+
+
 
           $this->users_bss->update_user($id_user, $user_data);
 
