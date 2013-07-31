@@ -168,6 +168,14 @@ class Users_bss extends CI_Model {
   }
 
 
+  function validate_folio($id_folio){
+    $query = $this->db->query("select subs.*, usr.vc_username, usr.vc_lastname from tb_subscriptions subs ".
+                              "join tb_users usr on (usr.id_user = subs.id_user) ".                        
+                              "where vc_folio = {$id_folio}");
+
+    return $query->row_array();  
+  }
+
 
   //done
   function general () {

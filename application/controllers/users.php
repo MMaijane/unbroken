@@ -10,6 +10,20 @@
 
 
 
+  cambio de variables,,   
+
+    vc_facebook = horario
+    vc_state = Colonia
+    vc_cp = G. Medicos
+    vc_pais = Emergencia
+
+    done ** validar # folio
+    done ** historial sin boton 
+    done ** que se actualiza las subs para el prox año
+
+
+
+
  cambiar la base de datos para que aceepte d-m-y 
 
 
@@ -78,7 +92,7 @@ class Users extends CI_Controller{
               'vc_street'=>strtoupper($this->input->post('vc_street')),
               'vc_city'=>strtoupper($this->input->post('vc_city')),
               'vc_state'=>strtoupper($this->input->post('vc_state')),
-              'i_cp'=>$this->input->post('i_cp'),
+              'vc_cp'=>$this->input->post('vc_cp'),
               'vc_country'=>strtoupper($this->input->post('vc_country')),
               'vc_email'=>$this->input->post('vc_email'),
               'vc_facebook'=>$this->input->post('vc_facebook'),
@@ -146,11 +160,11 @@ class Users extends CI_Controller{
             $data['vc_msisdn']      = array('name'=>'vc_msisdn', 'size'=>15, 'key'=>'Celular');
             $data['vc_street']      = array('name'=>'vc_street', 'size'=>30, 'key'=>'Calle');
             $data['vc_city']        = array('name'=>'vc_city', 'size'=>30, 'key'=>'Ciudad');
-            $data['vc_state']       = array('name'=>'vc_state', 'size'=>30, 'key'=>'Estado');
-            $data['i_cp']           = array('name'=>'i_cp', 'size'=>7, 'key'=>'CP.');
-            $data['vc_country']     = array('name'=>'vc_country', 'size'=>30, 'key'=>'Pais');
+            $data['vc_state']       = array('name'=>'vc_state', 'size'=>30, 'key'=>'Colonia');
+            $data['vc_cp']           = array('name'=>'vc_cp', 'size'=>7, 'key'=>'G. Medicos');
+            $data['vc_country']     = array('name'=>'vc_country', 'size'=>30, 'key'=>'Emergencia');
             $data['vc_email']       = array('name'=>'vc_email', 'size'=>40, 'key'=>'E-mail');
-            $data['vc_facebook']    = array('name'=>'vc_facebook', 'size'=>30, 'key'=>'Facebook');
+            $data['vc_facebook']    = array('name'=>'vc_facebook', 'size'=>30, 'key'=>'Horario');
             $data['vc_picture']     = array('name'=>'vc_picture', 'size'=>40, 'key'=>'Imagen');
             $data['vc_coment']      = array('name'=>'vc_coment', 'cols'=>40, 'rows'=>90, 'key'=>'Comentario');
 
@@ -179,37 +193,52 @@ class Users extends CI_Controller{
             $this->load->library('form_validation');
             if ($this->form_validation->run('renew') != FALSE) { 
 
-                  # obtain the expires date with the package id
-                  $package_months = $this->packages_bss->get_package_months($this->input->post('id_pack'));
-                  $user_id = $this->users_bss->get_user_id($this->input->post('vc_username'), $this->input->post('dt_birthday'));
+                  # validar el # de folio 
+                  $validate_folio = $this->users_bss->validate_folio($this->input->post('vc_folio'));
+                  if ($validate_folio == null) {
+
+                          # obtain the expires date with the package id
+                          $package_months = $this->packages_bss->get_package_months($this->input->post('id_pack'));
+                          $user_id = $this->users_bss->get_user_id($this->input->post('vc_username'), $this->input->post('dt_birthday'));
 
 
-                  # ver el corte (15 - 30)
-                  $day = date('d');
-                  if ($day <= 15 && $day <= 7) { $b_slot = 1; $d_day = 30; $expires = $package_months['i_months']-1; #30
-                  } else if ($day <=15 && $day > 7) { $b_slot = 2; $d_day = 15; $expires = $package_months['i_months']; #15
-                  } else if ($day <= 30 && $day <= 23) { $b_slot = 2; $d_day = 15;  $expires = $package_months['i_months']; #15
-                  } else { $b_slot = 1; $d_day = 30; $expires = $package_months['i_months']; #30
+                          # ver el corte (15 - 30)
+                          $day = date('d');
+                          if ($day <= 15 && $day <= 7) { $b_slot = 1; $d_day = 30; $expires = $package_months['i_months']-1; #30
+                          } else if ($day <=15 && $day > 7) { $b_slot = 2; $d_day = 15; $expires = $package_months['i_months']; #15
+                          } else if ($day <= 30 && $day <= 23) { $b_slot = 2; $d_day = 15;  $expires = $package_months['i_months']; #15
+                          } else { $b_slot = 1; $d_day = 30; $expires = $package_months['i_months']; #30
+                          }
+
+                          $m = date('m');
+                          $m = $m + $expires;
+                          if ($m > 12){
+                            $m = abs(12-$m); #meses del prox año 
+                            $y = date('Y') +1;
+                          } else {$y=date('Y');}
+
+                          $expires_date  = date($y.'-'.$m.'-'.$d_day);
+                        
+
+                          # tb_subscriptions
+                          $subscription_data = array(
+                            'id_user'=>$this->input->post('id_user'),
+                            'id_package'=>$this->input->post('id_pack'),
+                            'dt_subscription'=>$date,
+                            'dt_expires'=>$expires_date,
+                            'b_slot'=>$b_slot,
+                            'vc_folio' => $this->input->post('vc_folio'),
+                            'b_status'=>'1',
+                          );
+                          
+                          $this->users_bss->insert_subscription($subscription_data);
+
+                          $msg = "Se renovo una subscripcion exitosa.";
+                          $this->view($this->input->post('id_user'), $msg);
+                  } else {                
+                        $msg = "Numero de folio ya existe para \n ".$validate_folio['vc_username']." ".$validate_folio['vc_lastname'];                      
+                        $this->view($this->input->post('id_user'), $msg, $validate_folio);
                   }
-
-                  $m = date('m');
-                  $m = $m + $expires;
-                  $expires_date  = date('Y-'.$m.'-'.$d_day);
-                # tb_subscriptions
-                $subscription_data = array(
-                  'id_user'=>$this->input->post('id_user'),
-                  'id_package'=>$this->input->post('id_pack'),
-                  'dt_subscription'=>$date,
-                  'dt_expires'=>$expires_date,
-                  'b_slot'=>$b_slot,
-                  'vc_folio' => $this->input->post('vc_folio'),
-                  'b_status'=>'1',
-                );
-                
-                $this->users_bss->insert_subscription($subscription_data);
-
-                $msg = "Se renovo una subscripcion exitosa.";
-                $this->view($this->input->post('id_user'), $msg);
           } else {
 
                 $msg = "Necesitas un numero de folio.";
@@ -308,7 +337,7 @@ class Users extends CI_Controller{
             'vc_street'=>strtoupper($this->input->post('vc_street')),
             'vc_city'=>strtoupper($this->input->post('vc_city')),
             'vc_state'=>strtoupper($this->input->post('vc_state')),
-            'i_cp'=>$this->input->post('i_cp'),
+            'vc_cp'=>$this->input->post('vc_cp'),
             'vc_country'=>strtoupper($this->input->post('vc_country')),
             'vc_email'=>$this->input->post('vc_email'),
             'vc_facebook'=>$this->input->post('vc_facebook'),
@@ -333,11 +362,11 @@ class Users extends CI_Controller{
           $data['vc_msisdn']      = array('name'=>'vc_msisdn', 'size'=>15, 'key'=>'Celular', 'value'=>$data['user']['vc_msisdn']);
           $data['vc_street']      = array('name'=>'vc_street', 'size'=>30, 'key'=>'Calle', 'value'=>$data['user']['vc_street']);
           $data['vc_city']        = array('name'=>'vc_city', 'size'=>30, 'key'=>'Ciudad', 'value'=>$data['user']['vc_city']);
-          $data['vc_state']       = array('name'=>'vc_state', 'size'=>30, 'key'=>'Estado', 'value'=>$data['user']['vc_state']);
-          $data['i_cp']           = array('name'=>'i_cp', 'size'=>7, 'key'=>'CP.', 'value'=>$data['user']['i_cp']);
-          $data['vc_country']     = array('name'=>'vc_country', 'size'=>30, 'key'=>'Pais', 'value'=>$data['user']['vc_country']);
+          $data['vc_state']       = array('name'=>'vc_state', 'size'=>30, 'key'=>'Colonia', 'value'=>$data['user']['vc_state']);
+          $data['vc_cp']           = array('name'=>'vc_cp', 'size'=>7, 'key'=>'G. Medicos.', 'value'=>$data['user']['vc_cp']);
+          $data['vc_country']     = array('name'=>'vc_country', 'size'=>30, 'key'=>'Emergencia', 'value'=>$data['user']['vc_country']);
           $data['vc_email']       = array('name'=>'vc_email', 'size'=>40, 'key'=>'E-mail', 'value'=>$data['user']['vc_email']);
-          $data['vc_facebook']    = array('name'=>'vc_facebook', 'size'=>30, 'key'=>'Facebook', 'value'=>$data['user']['vc_facebook']);
+          $data['vc_facebook']    = array('name'=>'vc_facebook', 'size'=>30, 'key'=>'Horario', 'value'=>$data['user']['vc_facebook']);
           $data['vc_picture']     = array('name'=>'vc_picture', 'size'=>40, 'key'=>'Imagen', 'value'=>$data['user']['vc_picture']);
           $data['vc_coment']      = array('name'=>'vc_coment', 'cols'=>40, 'rows'=>60, 'key'=>'Comentario', 'value'=>$data['user']['vc_coment']);
 

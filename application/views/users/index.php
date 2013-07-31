@@ -23,7 +23,7 @@
   $this->table->set_caption("Listado de Socios");
 
   //-- Header Row
-  $this->table->set_heading('# Socio', 'Nombre', 'Tel. casa', 'Celular', 'Email', 'Facebook', 'Registrado desde');
+  $this->table->set_heading('# Socio', 'Nombre', 'Tel. casa', 'Email', 'Registro');
 
   //-- Content Rows
   foreach($users as $key => $value) {
@@ -36,9 +36,7 @@
       $value['id_user'],
       anchor("users/view/{$value['id_user']}", $value['vc_username']." ".$value['vc_lastname']),
       $value['vc_phonenumber'],
-      $value['vc_msisdn'],
       $value['vc_email'],
-      $value['vc_facebook'],
       $ff
     );
   } 
@@ -62,12 +60,14 @@
     <table name="tb_new_user" id="tb_new_user"> 
       <tr><td><?=anchor("users/subscribe", "Nvo. Socio")?></td></tr>
     </table>
-      
-    <?php
-      //-- Display Table
-      $table = $this->table->generate();
-      echo $table;
-    ?><br><br><br>
+    <div id="div_left_2"></div>  
+    <div id="div_right_2">  
+        <?php
+          //-- Display Table
+          $table = $this->table->generate();
+          echo $table;
+        ?><br><br><br>
+    </div>
   </div>  
 
 

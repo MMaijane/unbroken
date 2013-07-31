@@ -23,7 +23,7 @@
     # table of users
     $this->table->set_template($tmpl);    
     $this->table->set_caption("<b>Socios</b>");
-    $this->table->set_heading('# Socio', 'Nombre', 'Tel. casa', 'Celular', 'Email', 'Registrado desde');
+    $this->table->set_heading('# Socio', 'Nombre', 'Registro');
 
     //-- Content Rows
     foreach($users as $key => $value) {
@@ -35,9 +35,6 @@
       $this->table->add_row(
         $value['id_user'],
         anchor("users/view/{$value['id_user']}", $value['vc_username']." ".$value['vc_lastname']),
-        $value['vc_phonenumber'],
-        $value['vc_msisdn'],
-        $value['vc_email'],
         $ff
       );
     } 
@@ -84,7 +81,7 @@
     # table of users
     $this->table->set_template($tmpl);    
     $this->table->set_caption("<b>Socios Activos</b>");
-    $this->table->set_heading('# Socio', 'Nombre', 'Tel. casa', 'Celular', 'Email', 'Fecha Expiracion');
+    $this->table->set_heading('# Socio', 'Nombre', 'Folio','Expiracion');
 
     //-- Content Rows
     foreach($active_users as $key => $value) {
@@ -96,9 +93,7 @@
       $this->table->add_row(
         $value['id_user'],
         anchor("users/view/{$value['id_user']}", $value['vc_username']." ".$value['vc_lastname']),
-        $value['vc_phonenumber'],
-        $value['vc_msisdn'],
-        $value['vc_email'],
+        $value['vc_folio'],
         $ff
       );
     } 
@@ -140,17 +135,19 @@
     # table of users
     $this->table->set_template($tmpl);    
     $this->table->set_caption("<b>Socios Desactivos</b>");
-    $this->table->set_heading('# Socio', 'Nombre', 'Tel. casa', 'Celular', 'Email');
+    $this->table->set_heading('# Socio', 'Nombre', 'Registro' );
 
     //-- Content Rows
     foreach($deactive_users as $key => $value) {
+      
+      #change the date form - from  yyyy-mm-dd to dd-mm-yyyy
+      $f = explode('-', $value['dt_registry']);
+      $ff = $f[2].'-'.$f[1].'-'.$f[0];
 
       $this->table->add_row(
         $value['id_user'],
         anchor("users/view/{$value['id_user']}", $value['vc_username']." ".$value['vc_lastname']),
-        $value['vc_phonenumber'],
-        $value['vc_msisdn'],
-        $value['vc_email']
+        $ff
       );
     } 
 
@@ -191,7 +188,7 @@
     # table of users
     $this->table->set_template($tmpl);    
     $this->table->set_caption("<b>Socios A Vencer</b>");
-    $this->table->set_heading('# Socio', 'Nombre', 'Tel. casa', 'Celular', 'Email', 'Registrado desde');
+    $this->table->set_heading('# Socio', 'Nombre', 'Registro');
 
     //-- Content Rows
     foreach($next_debt_users as $key => $value) {
@@ -203,9 +200,6 @@
       $this->table->add_row(
         $value['id_user'],
         anchor("users/view/{$value['id_user']}", $value['vc_username']." ".$value['vc_lastname']),
-        $value['vc_phonenumber'],
-        $value['vc_msisdn'],
-        $value['vc_email'],
         $ff
       );
     } 
