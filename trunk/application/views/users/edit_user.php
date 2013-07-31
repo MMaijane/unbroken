@@ -83,7 +83,7 @@ $yyyy = $f[0];
               <tr><td class="inner_left"><?=$vc_street['key'].' : '?></td><td><?=form_input($vc_street['name'], $vc_street['value'])?></td></tr>
               <tr><td class="inner_left"><?=$vc_city['key'].' : '?></td><td><?=form_input($vc_city['name'], $vc_city['value'])?></td></tr>
               <tr><td class="inner_left"><?=$vc_state['key'].' : '?></td><td><?=form_input($vc_state['name'], $vc_state['value'])?></td></tr>
-              <tr><td class="inner_left"><?=$i_cp['key'].' : '?></td><td><?=form_input($i_cp['name'], $i_cp['value'])?></td></tr>
+              <tr><td class="inner_left"><?=$vc_cp['key'].' : '?></td><td><?=form_input($vc_cp['name'], $vc_cp['value'])?></td></tr>
               <tr><td class="inner_left"><?=$vc_country['key'].' : '?></td><td><?=form_input($vc_country['name'], $vc_country['value'])?></td></tr>
               <tr><td class="inner_left"><?=$vc_email['key'].' : '?></td><td><?=form_input($vc_email['name'], $vc_email['value'])?></td></tr>
               <tr><td class="inner_left"><?=$vc_facebook['key'].' : '?></td><td><?=form_input($vc_facebook['name'], $vc_facebook['value'])?></td></tr>

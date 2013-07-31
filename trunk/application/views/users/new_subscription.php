@@ -47,7 +47,7 @@
 		          <tr><td class="inner_left"><?=$vc_street['key'].' : '?></td><td><?=form_input($vc_street['name'], set_value($vc_street['name']))?></td></tr>
 		          <tr><td class="inner_left"><?=$vc_city['key'].' : '?></td><td><?=form_input($vc_city['name'], set_value($vc_city['name']))?></td></tr>
 		          <tr><td class="inner_left"><?=$vc_state['key'].' : '?></td><td><?=form_input($vc_state['name'], set_value($vc_state['name']))?></td></tr>
-		          <tr><td class="inner_left"><?=$i_cp['key'].' : '?></td><td><?=form_input($i_cp['name'], set_value($i_cp['name']))?></td></tr>
+		          <tr><td class="inner_left"><?=$vc_cp['key'].' : '?></td><td><?=form_input($vc_cp['name'], set_value($vc_cp['name']))?></td></tr>
 		          <tr><td class="inner_left"><?=$vc_country['key'].' : '?></td><td><?=form_input($vc_country['name'], set_value($vc_country['name']))?></td></tr>
 		          <tr><td class="inner_left"><?=$vc_email['key'].' : '?></td><td><?=form_input($vc_email['name'], set_value($vc_email['name']))?></td></tr>
 		          <tr><td class="inner_left"><?=$vc_facebook['key'].' : '?></td><td><?=form_input($vc_facebook['name'], set_value($vc_facebook['name']))?></td></tr>

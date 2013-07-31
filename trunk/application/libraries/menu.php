@@ -14,6 +14,9 @@ class Menu{
   		$menu .= "<li>";		
   		$menu .= anchor("packages/","Promociones");		
   		$menu .= "</li>";		
+      $menu .= "<li>";    
+      $menu .= anchor("control/","Control Entrada");   
+      $menu .= "</li>";         
   		$menu .= "</ul>";
 		
   		return $menu;

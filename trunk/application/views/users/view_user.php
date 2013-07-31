@@ -125,9 +125,9 @@
             <table id="inner_table" border="0" >
               <tr><td class="inner_left">Calle :</td><td><?=$user['vc_street']?></td></tr>
               <tr><td class="inner_left">Ciudad :</td><td><?=$user['vc_city']?></td></tr>
-              <tr><td class="inner_left">Estado :</td><td><?=$user['vc_state']?></td></tr>
-              <tr><td class="inner_left">CP. :</td><td><?=$user['i_cp']?></td></tr>
-              <tr><td class="inner_left">Pais :</td><td><?=$user['vc_country']?></td></tr>
+              <tr><td class="inner_left">Colonia :</td><td><?=$user['vc_state']?></td></tr>
+              <tr><td class="inner_left">G. Medicos. :</td><td><?=$user['vc_cp']?></td></tr>
+              <tr><td class="inner_left">Emergencia :</td><td><?=$user['vc_country']?></td></tr>
               <tr><td class="inner_left">Email :</td><td><?=$user['vc_email']?></td></tr>
               <tr><td class="inner_left">Facebook :</td><td><?=$user['vc_facebook']?></td></tr>          
             </table>
@@ -173,10 +173,9 @@
       }
     } ?>
 
-
+    <br><br>
     <!-- ver historial -->
-    <button OnClick='ShowHistory()'>Ver Historial</button>
-    <div id='HistoryDiv' style='display:none;'> <?php          
+    <div id='HistoryDiv' > <hr><?php          
         if (isset($error['history_pk'])) { ?>
           <p class='error'><?=$error['history_pk'].br()?> </p> <?php #error
         } else {
