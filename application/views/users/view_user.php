@@ -75,7 +75,9 @@
                'id' => 'vc_folio',
                'size' => '5');
 
-
+  for ($i=1; $i <=31; $i++) {$day[$i] = $i; }
+  for ($i=1; $i <=12; $i++) {$month[$i] = $i; }
+  for ($i=date('Y'); $i>='1950'; $i--) {$year[$i] = $i; }
 ?>
 
 <?php $this->load->view('templates/header'); ?>
@@ -126,10 +128,10 @@
               <tr><td class="inner_left">Calle :</td><td><?=$user['vc_street']?></td></tr>
               <tr><td class="inner_left">Ciudad :</td><td><?=$user['vc_city']?></td></tr>
               <tr><td class="inner_left">Colonia :</td><td><?=$user['vc_state']?></td></tr>
-              <tr><td class="inner_left">G. Medicos. :</td><td><?=$user['vc_cp']?></td></tr>
+              <tr><td class="inner_left">G. Medicos :</td><td><?=$user['vc_cp']?></td></tr>
               <tr><td class="inner_left">Emergencia :</td><td><?=$user['vc_country']?></td></tr>
               <tr><td class="inner_left">Email :</td><td><?=$user['vc_email']?></td></tr>
-              <tr><td class="inner_left">Facebook :</td><td><?=$user['vc_facebook']?></td></tr>          
+              <tr><td class="inner_left">Horario :</td><td><?=$user['vc_facebook']?></td></tr>          
             </table>
           </td>
           <td class="data_rows_single_user">
@@ -163,6 +165,10 @@
         echo "Renovar? <br>"; ?>
         <table border="0" align='center' >
           <tr><td>Promocion : </td><td><?=form_dropdown('id_pack', $packs)?></td></tr>
+          <tr><td>Desde : </td><td>                                      
+                  <?=form_dropdown('dd', $day,  set_value('dd', date('d')))?>-
+                  <?=form_dropdown('mm', $month, set_value('mm', date('m')))?>-
+                  <?=form_dropdown('yyyy', $year, set_value('yyyy', date('Y')))?></td></tr>
           <tr><td>No. folio : </td><td><?=form_input($dt)?></td></tr>
         </table><?php 
 

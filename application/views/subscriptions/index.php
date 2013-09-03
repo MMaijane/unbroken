@@ -188,18 +188,19 @@
     # table of users
     $this->table->set_template($tmpl);    
     $this->table->set_caption("<b>Socios A Vencer</b>");
-    $this->table->set_heading('# Socio', 'Nombre', 'Registro');
+    $this->table->set_heading('# Socio', 'Nombre', 'Folio', 'Expira');
 
     //-- Content Rows
     foreach($next_debt_users as $key => $value) {
 
       #change the date form - from  yyyy-mm-dd to dd-mm-yyyy
-      $f = explode('-', $value['dt_birthday']);
+      $f = explode('-', $value['dt_expires']);
       $ff = $f[2].'-'.$f[1].'-'.$f[0];
 
       $this->table->add_row(
         $value['id_user'],
         anchor("users/view/{$value['id_user']}", $value['vc_username']." ".$value['vc_lastname']),
+        $value['vc_folio'],
         $ff
       );
     } 

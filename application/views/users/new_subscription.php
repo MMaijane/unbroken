@@ -34,7 +34,7 @@
 		          <tr><td class="inner_left"><?=$vc_username['key'].' : '?></td><td><?=form_input($vc_username['name'], set_value($vc_username['name']))?>*</td></tr>
 		          <tr><td class="inner_left"><?=$vc_lastname['key'].' : '?></td><td><?=form_input($vc_lastname['name'], set_value($vc_lastname['name']))?>*</td></tr>
 		          <tr><td class="inner_left"><?=$dt_birthday['key'].' : '?></td><td>                                      
-		          												<?=form_dropdown('dd', $day)?>
+		                                  <?=form_dropdown('dd', $day)?>
                                       <?=form_dropdown('mm', $month)?>
                                       <?=form_dropdown('yyyy', $year)?></td></tr>
 		          <tr><td class="inner_left">Tel. <?=$vc_worknumber['key'].' : '?></td><td><?=form_input($vc_worknumber['name'], set_value($vc_worknumber['name']))?></td></tr>

@@ -53,11 +53,21 @@ class Control extends CI_Controller{
 
   function validate_input($id=''){
     
-    $user_data = $this->users_bss->view_user_by_id($this->input->post('id_acceso'));
+    $data['user'] = $this->users_bss->view_user_by_id($this->input->post('id_acceso'));
+    $data['user_subs'] = $this->users_bss->view_active_package($this->input->post('id_acceso'));
+    $data['valid'] = isset($data['user']["id_user"]) ? 1: 0 ;
+    $data['valid_subs'] = isset($data['user_subs']["id_subscription"]) ? 1: 0 ;
 
-    
-var_dump($user_data);
+    if ($data['valid_subs'] == 0){
+      $data['user_old_subs'] = $this->users_bss->view_last_old_subs($this->input->post('id_acceso'));
+    }
+
+
+    $this->load->view('control/index', $data);
   }
+
+
+
 
 
 }

@@ -21,6 +21,22 @@
     done ** historial sin boton 
     done ** que se actualiza las subs para el prox año
 
+    done ** poner que se escoja la fecha en la que se crea la subscripcion
+    ** crear pantalla independiente de registro eprsonal
+    no se puede por los joins ** socios desactivos porner la fecha del ultimo registro
+    done ** socios a vencer  poner fecha en la que vencen
+
+to do
+
+# para hacerlo gastos medicos
+alter table tb_users change i_cp vc_cp varchar (40);
+
+# para ver cuantos folios repetidos hay
+select u.vc_username, u.vc_lastname, s.id_user, s.vc_folio as folio  from tb_subscriptions s join tb_users u on (u.id_user = s.id_user)  group by id_user having folio >1 order by folio desc;
+
+
+
+
 
 
 
@@ -180,7 +196,10 @@ class Users extends CI_Controller{
     $this->load->model('packages_bss');
     $user_id = $this->input->post('id_user');
 
-    $date = date('Y-m-d');  
+    $d = $this->input->post('dd');
+    $m = $this->input->post('mm');
+    $y = $this->input->post('yyyy');
+    $subs_day = date($y.'-'.$m.'-'.$d);  
 
     # verificar que no halla registro activo
     $data['active_pk'] = $this->users_bss->view_active_package($this->input->post('id_user'));
@@ -217,14 +236,13 @@ class Users extends CI_Controller{
                             $y = date('Y') +1;
                           } else {$y=date('Y');}
 
-                          $expires_date  = date($y.'-'.$m.'-'.$d_day);
-                        
+                          $expires_date  = date($y.'-'.$m.'-'.$d_day);                
 
                           # tb_subscriptions
                           $subscription_data = array(
                             'id_user'=>$this->input->post('id_user'),
                             'id_package'=>$this->input->post('id_pack'),
-                            'dt_subscription'=>$date,
+                            'dt_subscription'=>$subs_day,
                             'dt_expires'=>$expires_date,
                             'b_slot'=>$b_slot,
                             'vc_folio' => $this->input->post('vc_folio'),
@@ -236,7 +254,7 @@ class Users extends CI_Controller{
                           $msg = "Se renovo una subscripcion exitosa.";
                           $this->view($this->input->post('id_user'), $msg);
                   } else {                
-                        $msg = "Numero de folio ya existe para \n ".$validate_folio['vc_username']." ".$validate_folio['vc_lastname'];                      
+                        $msg = "Numero de folio ya existe para  ".$validate_folio['vc_username']." ".$validate_folio['vc_lastname'];                      
                         $this->view($this->input->post('id_user'), $msg, $validate_folio);
                   }
           } else {
