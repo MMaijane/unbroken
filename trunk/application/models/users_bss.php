@@ -39,20 +39,13 @@ class Users_bss extends CI_Model {
   function get_debt_users($slot, $day) {
 
     $day = date('d');
-    if ($day <= 15 && $day <= 7) { $b_slot = 1; $d_day = 30;#30
-    } else if ($day <=15 && $day > 7) { $b_slot = 2; $d_day = 15; #15
-    } else if ($day <= 30 && $day <= 23) { $b_slot = 2; $d_day = 15; #15
-    } else { $b_slot = 1; $d_day = 30; #30
-    }
-            
-    $m = date('m');
-    $expires_date  = date('Y-'.$m.'-'.$d_day);
-
+    $day = $day >=1 && $day <=15 ? 15 : 30;        
+    $expires_date  = date('Y-m-'.$day);
 
     $query = $this->db->query("select * from tb_subscriptions subs ".
                               "join tb_users usr on (usr.id_user = subs.id_user) ".
                               "join tb_packages pack on (pack.id_packages = subs.id_package) ".
-                              "where subs.b_slot= {$slot} and subs.b_status=1 and subs.dt_expires <= '{$expires_date}' ".
+                              "where subs.b_status=1 and subs.dt_expires <= '{$expires_date}' ".
                               "order by dt_subscription desc");
 
     return $query->result_array();
@@ -80,9 +73,6 @@ class Users_bss extends CI_Model {
     return $query->result_array();
   }
 
-
-
-
   //done
   function insert_user($user_data) {
 
@@ -90,16 +80,12 @@ class Users_bss extends CI_Model {
     $this->db->insert('tb_users', $user_data);
   }
 
-
-
   //done
   function insert_subscription($subscription_data) {
 
     $this->load->database();
     $this->db->insert('tb_subscriptions', $subscription_data);    
   }
-
-
 
   function update_user($id_user, $subscription_data) {
 
@@ -138,6 +124,16 @@ class Users_bss extends CI_Model {
                               "where usr.id_user= {$id} and subs.b_status=1");
     return $query->row_array();
   }
+
+
+  function view_last_old_subs($id){
+    $query = $this->db->query("select * from tb_subscriptions subs ".
+                              "join tb_users usr on (usr.id_user = subs.id_user) ".
+                              "join tb_packages pack on (pack.id_packages = subs.id_package) ".
+                              "where usr.id_user= {$id} and subs.b_status=0 order by subs.dt_expires desc limit 1");
+    return $query->row_array(); 
+  }
+
 
 
   function view_user_history_by_id ($id) {

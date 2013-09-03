@@ -4,7 +4,7 @@ class Control_bss extends CI_Model {
 
 
 
-  function Packages() {
+  function Control() {
     // Call the Model constructor
     parent::Packages();
     $this->load->helper('url');

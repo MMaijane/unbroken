@@ -2,7 +2,12 @@
 body {
 	background-color: black;
 	width: 98%;
+	font-family: Verdana;
 }
+
+
+a:link { color: black;}
+a:visited {color: black;}
 
 .usr_pic_l{
 	height: 80px;
@@ -20,6 +25,40 @@ body {
 /*  oofer package */
 .offer_package{
 	text-align: center;
+}
+
+
+.data_control {
+	background-color: #85ad3a;
+  width: 50%;
+  margin: auto;
+  position:relative;
+	
+}
+
+
+.data_control_error {
+	background-color: #DF0101;
+  width: 50%;
+  margin: auto;
+  position:relative;
+}
+
+#saludo {
+	width: 100%;
+}
+
+#main_table_3 {
+	width: 90%;
+	font-size: 20px;
+	text-align: left;
+  border: solid 3px #006600;
+}
+
+
+.inner_photo_2 {
+  width: 10%;
+  text-align: center;
 }
 
 
@@ -50,7 +89,7 @@ body {
 
 #img_right{
 	width:67%; 
-	height: 242px;
+	height: 170px;
 	background-size: 250px;
 	background-image: url('http://localhost/unbroken/img/main/logo2.png');
 	background-position: right;
@@ -149,6 +188,19 @@ body {
 
 } 
 
+#content_2 {
+  float:left; 
+  margin-top: 3px;
+  margin-bottom: 15px;
+  width:100%; 
+  height: 78%;
+  background-color: grey;
+  font: bold 18px Verdana; 
+  line-height:normal; 
+
+} 
+
+
 
 #group_table{
 font-size: 14px;
@@ -162,6 +214,14 @@ asi como poner el agregar cliente en la seccion de arriba derecha
 
 #main_table {
 	width: 90%;
+	font-size: 14px;
+	float: center;
+	text-align: left;
+
+}
+
+#main_table_3 {
+	width: 100%;
 	font-size: 14px;
 	float: center;
 	text-align: left;
@@ -214,6 +274,7 @@ separan la tabla en 3 secciones para poder mostrar la imagen
 	text-align: center;
 }
 
+
 #main_table_single_user {
 	width: 100%;
 }
@@ -233,7 +294,6 @@ separan la tabla en 3 secciones para poder mostrar la imagen
 .usr_pic{
 	height: 200px;
 	margin-left: 80px;
-
 }
 
 
@@ -279,13 +339,11 @@ separan la tabla en 3 secciones para poder mostrar la imagen
     list-style:none;
     font-weight:bold;
     margin-bottom:10px;
-    <span class="code-comment">/* Clear floats */</span>
     float:left;
     width:100%;
-    <span class="code-comment">/* Bring the nav above everything else--uncomment if needed.
     position:relative;
     z-index:5;
-    */</span>
+
 }
 #nav li{
     float:left;
